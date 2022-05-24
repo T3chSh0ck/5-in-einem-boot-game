@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayTile : MonoBehaviour
 {
+    public Material material_inactive;
+    public Material material_active;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,5 +16,17 @@ public class PlayTile : MonoBehaviour
     void Update()
     {
         
+    }
+
+    void OnMouseOver()
+    {
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        renderer.material = material_active;
+    }
+
+    void OnMouseExit()
+    {
+        MeshRenderer renderer = GetComponent<MeshRenderer>();
+        renderer.material = material_inactive;
     }
 }
