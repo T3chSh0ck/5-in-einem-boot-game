@@ -10,8 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5519650335073996674}
   - component: {fileID: 2338694347405644762}
-  - component: {fileID: 6921236239822748853}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,23 +47,6 @@ CapsuleCollider:
   m_Height: 4.592134
   m_Direction: 1
   m_Center: {x: 0, y: 1.7810862, z: 0}
---- !u!114 &6921236239822748853
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7835075389790893316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09e92b62a1a41c7408f95fa4c0e85e3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: 0
-  p0: {fileID: 2100000, guid: c73a7b9ed31eef044a290253fad3efe0, type: 2}
-  p1: {fileID: 2100000, guid: 9c5ffa5d1b30ffc45b096a2f68ac4912, type: 2}
-  p2: {fileID: 2100000, guid: d39075656d6bc1644bc0581feee2ac0c, type: 2}
-  p3: {fileID: 2100000, guid: cfb631726fe6bad41aff4a81f17a41ad, type: 2}
 --- !u!1001 &7639834304997427574
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -119,14 +101,6 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 7f26513f7ad702d41b8042afec8bd17d, type: 3}
       propertyPath: m_Name
       value: Player
-      objectReference: {fileID: 0}
-    - target: {fileID: 919132149155446097, guid: 7f26513f7ad702d41b8042afec8bd17d, type: 3}
-      propertyPath: m_Layer
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 8164078558771037576, guid: 7f26513f7ad702d41b8042afec8bd17d, type: 3}
-      propertyPath: m_Layer
-      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f26513f7ad702d41b8042afec8bd17d, type: 3}
