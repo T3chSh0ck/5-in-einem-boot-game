@@ -40,7 +40,7 @@ public class GameController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(playing_field_states);
+       // Debug.Log(playing_field_states);
     }
 
     void UpdatePlacements()
