@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public int playerNumber;
     public Color color;
     public SpawnPoint[] spawnpoints;
     public bool active = true;
