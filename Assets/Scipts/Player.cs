@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class Player : MonoBehaviour
 {
+    public int playerNumber;
     public Color color;
     public SpawnPoint[] spawnpoints;
     // Start is called before the first frame update

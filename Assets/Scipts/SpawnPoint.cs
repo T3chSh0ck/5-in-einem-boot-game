@@ -10,6 +10,7 @@ public class SpawnPoint : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //Figure.playerNr = player.playerNumber;
     }
 
     // Update is called once per frame
@@ -18,10 +19,6 @@ public class SpawnPoint : MonoBehaviour
         
     }        
     public void Spawn(){
-
-        {
-
-
             GameObject instanz = Instantiate(Figure, gameObject.transform.position, Quaternion.identity);
             instanz.GetComponent<Renderer>().material.color = player.color;
         }
