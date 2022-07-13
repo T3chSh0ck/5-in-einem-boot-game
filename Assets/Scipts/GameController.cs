@@ -35,10 +35,15 @@ public class GameController : MonoBehaviour
                                                              {null,null,   1,null,null,null,null,   0,   0,null,null,null,null,   4,null,null},
                                                              {null,null,null,null,null,null,null,   0,   0,null,null,null,null,null,null,null},
                                                              {null,null,null,null,null,null,   0,   0,   0,   0,null,null,null,null,null,null}};
+    private Transform trans;
+    private PlayTile[] playTiles;
+    private int[] originTile;
     // Start is called before the first frame update
     void Start()
     {
-
+        trans = gameObject.transform;
+        playTiles = GetComponentsInChildren<PlayTile>();
+        
     }
 
     // Update is called once per frame
@@ -57,17 +62,7 @@ public class GameController : MonoBehaviour
 
     }*/
 
-    int[] convertCoordinatesToBoard(int x, int y)
-    {
-        // realx  =  22boardx - 66
-        // realy  =  22boardy - 198
-        // Umstellen nach board-koordinaten
-        // boardx = (realx + 66 )/22
-        // boardy = (realy + 198)/22
-
-        int[] boardCoords = new int[2] {(x - origin[0])/22, (y - origin[1])/22};
-        return boardCoords;
-    }
+    
 
     int[] convertBoardToCoordinates(int x, int y)
     {
@@ -85,4 +80,51 @@ public class GameController : MonoBehaviour
         
     }
 
+    public void ResetFieldStates(){
+        foreach(var tile in playTiles){
+            tile.ResetState();
+        }
+    }
+
+    public void MakeMove(int x, int y){
+        	if(originTile is null){
+                originTile[0] = x;
+                originTile[1] = y;
+            }else{
+                if(CheckMoveValid(x, y)){
+                    Debug.Log("Valid move");
+                    playing_field_states[x,y] = playing_field_states[originTile[0],originTile[1]];
+                    playing_field_states[originTile[0],originTile[1]] = 0;
+                }
+            }
+            OutputFieldStates();
+    }
+
+    private bool CheckMoveValid(int x, int y){
+        if(playing_field_states[x,y] == 0){
+            if(originTile[0] != x && originTile[1] != y){
+                if( ((originTile[0] - 1 == x || originTile[1] - 1 == y) || (originTile[0] + 1 == x || originTile[1] +1 == y))){
+                    return true;
+                }
+            }
+            
+        }
+        return false;
+    }
+
+    private void OutputFieldStates(){
+        string line = "";
+        for(int y = 0; y < 16; y++){
+            for(int x = 0; x < 16; x++){
+                if(playing_field_states[x,y] is null){
+                    line += "x";
+                }
+                else{
+                    line += playing_field_states[x,y];
+                }
+            }
+            Debug.Log(line);
+            line = "";
+        }
+    }
 }

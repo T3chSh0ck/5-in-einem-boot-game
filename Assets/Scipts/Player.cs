@@ -8,10 +8,11 @@ public class Player : MonoBehaviour
     public int playerNumber;
     public Color color;
     public SpawnPoint[] spawnpoints;
+    public bool isActive;
     // Start is called before the first frame update
     void Start()
     {
-
+        SpawnFigures();
     }
 
     // Update is called once per frame
@@ -22,5 +23,14 @@ public class Player : MonoBehaviour
 
 
 
+    }
+
+    void SpawnFigures(){
+        if(isActive){
+            foreach(SpawnPoint spawn in spawnpoints){
+                spawn.Spawn();
+            }
+        }
+        
     }
 }
