@@ -135,6 +135,5 @@ public class GameController : MonoBehaviour
         foreach(Player p in players){
             p.InitializePlayer(playersActive[i]);
         }
-        
     }
 }

@@ -8,11 +8,26 @@ public class PlayTile : MonoBehaviour
     public Material NormalMaterial;
     public Material SelectedMaterial;
     public GameController controller;
+    public int[] position;
+    public PlayTile[] Neighbors; //Clockwise, starting "north" (-x)
     private Renderer rend;
     private bool selected = false;
     private int[] origin = new int[2] {-44, -176};
     
     // Start is called before the first frame update
+    private void OnDrawGizmos() 
+    {
+        Vector3 offset = new Vector3(0,5,0);
+        Gizmos.color = Color.red;
+        foreach(PlayTile neighbor in Neighbors)
+        {
+            if(neighbor != null)
+            {
+                Gizmos.DrawLine(transform.position + offset, neighbor.transform.position + offset);
+            }
+        }
+    }
+    
     void Start()
     {
         rend = GetComponent<Renderer>();
