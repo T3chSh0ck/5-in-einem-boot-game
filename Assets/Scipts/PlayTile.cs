@@ -8,7 +8,8 @@ public class PlayTile : MonoBehaviour
     public Material NormalMaterial;
     public Material SelectedMaterial;
     public GameController controller;
-    public int[] position;
+    public Vector2 position;
+    public int state = 0;
     public PlayTile[] Neighbors; //Clockwise, starting "north" (-x)
     private Renderer rend;
     private bool selected = false;
@@ -31,12 +32,7 @@ public class PlayTile : MonoBehaviour
     void Start()
     {
         rend = GetComponent<Renderer>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        position = convertCoordinatesToBoard((int) transform.localPosition.z, (int) transform.localPosition.x);
     }
 
     void OnMouseEnter()
@@ -72,7 +68,11 @@ public class PlayTile : MonoBehaviour
         rend.material = NormalMaterial;
     }
 
-    private int[] convertCoordinatesToBoard(int x, int y)
+    public bool IsMovePossible(Vector2 Target){
+        
+    }
+
+    private Vector2 convertCoordinatesToBoard(int x, int y)
     {
         // realx  =  22boardx - 66
         // realy  =  22boardy - 198
@@ -80,7 +80,7 @@ public class PlayTile : MonoBehaviour
         // boardx = (realx + 66 )/22
         // boardy = (realy + 198)/22
 
-        int[] boardCoords = new int[2] {(x - origin[0])/22, (y - origin[1])/22};
+        Vector2 boardCoords = new Vector2((x - origin[0])/22, (y - origin[1])/22);
         Debug.Log(boardCoords);
         return boardCoords;
     }

@@ -131,9 +131,31 @@ public class GameController : MonoBehaviour
     }
 
     public void InitializeGame(bool[] playersActive){
-        int i = 0;
-        foreach(Player p in players){
+        foreach(Player p in players)
+        {
             p.InitializePlayer(playersActive[i]);
+        }
+
+        for(int i = 0; i < playersActive.length; i++)
+        {
+            if(!playersActive[i])
+            {
+                for(int y = 0; y < 16; y++)
+                {
+                    for(int x = 0; x < 16; x++)
+                    {
+                        if(playing_field_states[x,y] == i+1)
+                        {
+                            playing_field_states[x,y] = 0;
+                        }
+                    }
+                }
+            }
+        }
+
+        foreach(PlayTile tile in playTiles)
+        {
+            tile.state = (int) playing_field_states[tile.position.x,tile.position.y];
         }
     }
 }
