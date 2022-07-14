@@ -69,7 +69,7 @@ public class PlayTile : MonoBehaviour
     }
 
     public bool IsMovePossible(Vector2 Target){
-        
+        return true;
     }
 
     private Vector2 convertCoordinatesToBoard(int x, int y)

@@ -131,12 +131,13 @@ public class GameController : MonoBehaviour
     }
 
     public void InitializeGame(bool[] playersActive){
+        int j = 0;
         foreach(Player p in players)
         {
-            p.InitializePlayer(playersActive[i]);
+            p.InitializePlayer(playersActive[j++]);
         }
 
-        for(int i = 0; i < playersActive.length; i++)
+        for(int i = 0; i < playersActive.Length; i++)
         {
             if(!playersActive[i])
             {
@@ -155,7 +156,7 @@ public class GameController : MonoBehaviour
 
         foreach(PlayTile tile in playTiles)
         {
-            tile.state = (int) playing_field_states[tile.position.x,tile.position.y];
+            tile.state =(int) playing_field_states[(int) tile.position.x,(int) tile.position.y];
         }
     }
 }
