@@ -15,8 +15,6 @@ public class MainMenu : MonoBehaviour
     {
         {
             submit.onClick.AddListener(()=> StoreName());
-            menu2.SetActive(false);
-            menu3.SetActive(false);
             button1.onClick.AddListener(() => Spawner(1));
             button2.onClick.AddListener(() => Spawner(2));
             button3.onClick.AddListener(() => Spawner(3));
@@ -25,8 +23,6 @@ public class MainMenu : MonoBehaviour
             choosecolorgreen.onClick.AddListener(() => Spawner(6));
             choosecolorred.onClick.AddListener(() => Spawner(7));
             choosecoloryellow.onClick.AddListener(() => Spawner(8));
-
-            
         }
     }
 
@@ -42,8 +38,6 @@ public class MainMenu : MonoBehaviour
 
     public void Spawner(int a)
     {
-        menu1.SetActive(false);
-        menu2.SetActive(true);
         if (a == 5)
            
         {
@@ -52,10 +46,6 @@ public class MainMenu : MonoBehaviour
             {
                 p.Spawn();
             }
-            menu2.SetActive(false);
-            menu3.SetActive(true);
-
-
         }
         if (a == 6)
         {
@@ -63,8 +53,6 @@ public class MainMenu : MonoBehaviour
             {
                 p.Spawn();
             }
-            menu2.SetActive(false);
-
         }
         if (a == 7)
         {
@@ -72,7 +60,6 @@ public class MainMenu : MonoBehaviour
             {
                 p.Spawn();
             }
-            menu2.SetActive(false);
         }
         if (a == 8)
         {
@@ -80,7 +67,6 @@ public class MainMenu : MonoBehaviour
             {
                 p.Spawn();
             }
-            menu2.SetActive(false);
         }
     } 
 }
