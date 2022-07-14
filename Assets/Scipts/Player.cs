@@ -12,7 +12,7 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        SpawnFigures();
+
     }
 
     // Update is called once per frame
@@ -25,12 +25,17 @@ public class Player : MonoBehaviour
 
     }
 
-    void SpawnFigures(){
+    public void SpawnFigures(){
         if(isActive){
             foreach(SpawnPoint spawn in spawnpoints){
                 spawn.Spawn();
             }
         }
         
+    }
+
+    public void InitializePlayer(bool active){
+        isActive = active;
+        SpawnFigures();
     }
 }

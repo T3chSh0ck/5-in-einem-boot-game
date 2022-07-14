@@ -9,6 +9,7 @@ public class MainMenu : MonoBehaviour
     public Button button1, button2, button3, button4, choosecolorblue, choosecolorgreen, choosecolorred, choosecoloryellow, submit;
     public Player player1, player2, player3, player4;
     public TMP_InputField playername;
+    public GameController con;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,7 +37,7 @@ public class MainMenu : MonoBehaviour
     }
     public void StoreName()
     {
-        Debug.Log(playername.text);
+        PlayerPrefs.SetString("username",playername.text);
     }
 
     public void Spawner(int a)
@@ -50,7 +51,6 @@ public class MainMenu : MonoBehaviour
             foreach (SpawnPoint p in player1.spawnpoints)
             {
                 p.Spawn();
-
             }
             menu2.SetActive(false);
             menu3.SetActive(true);

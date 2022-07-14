@@ -38,6 +38,8 @@ public class GameController : MonoBehaviour
     private Transform trans;
     private PlayTile[] playTiles;
     private int[] originTile;
+
+    public Player[] players;
     // Start is called before the first frame update
     void Start()
     {
@@ -126,5 +128,13 @@ public class GameController : MonoBehaviour
             Debug.Log(line);
             line = "";
         }
+    }
+
+    public void InitializeGame(bool[] playersActive){
+        int i = 0;
+        foreach(Player p in players){
+            p.InitializePlayer(playersActive[i]);
+        }
+        
     }
 }
