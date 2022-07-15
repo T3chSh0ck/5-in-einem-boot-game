@@ -40,6 +40,7 @@ public class GameController : MonoBehaviour
     private Dictionary<Vector2,Figure>[] figureByPosition;
     private Transform trans;
     private PlayTile[] playTiles;
+    public PlayTile[] boats;
     public PlayTile originTile;
 
     public Player[] players;
@@ -49,7 +50,12 @@ public class GameController : MonoBehaviour
     private int currentPlayer = 0;
     private bool moveMade = false;
     public Figure[] allFigures;
-
+    public GameObject BoatPivot;
+    private float rotationTime = 7.0f;
+    private float rotationEnd = 0;
+    private float timer;
+    private bool rotating;
+    private Vector3 nextRotation;
     void Start()
     {
         trans = gameObject.transform;
@@ -71,13 +77,18 @@ public class GameController : MonoBehaviour
         }else{
             Debug.Log("Player " + winner + " wins!");
         }
-    }
 
-    void UpdatePlacements()
-    {
-
+        if(rotating){
+            Debug.Log("Spin?");
+            timer += Time.deltaTime;
+            if(timer <= rotationEnd){
+                BoatPivot.transform.eulerAngles = new Vector3(0, BoatPivot.transform.eulerAngles.y + (90/rotationTime) * Time.deltaTime,0);
+                
+            }else{
+                rotating = false;
+            }
+        }
     }
-    
 
     int[] convertBoardToCoordinates(int x, int y)
     {
@@ -87,11 +98,33 @@ public class GameController : MonoBehaviour
 
     void RotateBoats()
     {
+        rotationEnd = Time.time + rotationTime;
+        timer = Time.time;
+        rotating = true;
         int swap = BoatPositions[0];
-        BoatPositions[0] = BoatPositions[3];
-        BoatPositions[3] = BoatPositions[2];
-        BoatPositions[2] = BoatPositions[1];
-        BoatPositions[1] = swap;
+        BoatPositions[0] = BoatPositions[1];
+        BoatPositions[1] = BoatPositions[2];
+        BoatPositions[2] = BoatPositions[3];
+        BoatPositions[3] = swap;
+
+        PlayTile[] temp = boats[0].Neighbors;
+        boats[0].Neighbors = boats[1].Neighbors;
+        boats[1].Neighbors = boats[2].Neighbors;
+        boats[2].Neighbors = boats[3].Neighbors;
+        boats[3].Neighbors = temp;
+
+        foreach (PlayTile boat in boats)
+        {
+            foreach (PlayTile n in boat.Neighbors)
+            {
+                for (int i = 0; i < n.Neighbors.Length; i++)
+                {
+                    if(n.Neighbors[i] != null){
+                        n.Neighbors[i] = boat;
+                    }
+                }   
+            }
+        }
         
     }
 
@@ -109,11 +142,14 @@ public class GameController : MonoBehaviour
         }else if(originTile.isBase){
             //TODO
         }else if(targetTile.isBoat){
-            //TODO
+            BoatFigures[currentPlayer] += 1;
+            if(BoatFigures[currentPlayer] >= 5){
+                winner = currentPlayer;
+            }
+            RotateBoats();
         }
         originTile.MakeMove(targetTile);
 
-        
         originTile = null;
         moveMade = true;
     }
