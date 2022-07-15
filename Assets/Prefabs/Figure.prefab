@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 4365901828704327427}
   - component: {fileID: 3636018973823450834}
   - component: {fileID: -6892606836862707442}
-  - component: {fileID: 2772252143896563671}
   m_Layer: 2
   m_Name: Figure
   m_TagString: Untagged
@@ -113,23 +112,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerNr: 0
   movingRegular: 0
---- !u!95 &2772252143896563671
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6616481196701997542}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 0}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  movingJump: 0
+  y_offset: 5
+  debugJump: 0
+  debugMove: 0
+  debugTarget: {fileID: 0}

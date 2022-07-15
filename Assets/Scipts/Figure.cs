@@ -10,12 +10,11 @@ public class Figure : MonoBehaviour
     public int playerNr;
     public bool movingRegular = true;
     public bool movingJump = false;
-    Vector3 newPosition;
-    Animator anim;
+    public float y_offset = 10;
 
-    public bool debugJump = false;
-    public bool debugMove = false;
-    public PlayTile debugTarget;
+    Vector3 newPosition;
+
+
     /*
     public Figure(Vector3 position, Color col, int playerNr)
     {
@@ -26,7 +25,6 @@ public class Figure : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        anim = GetComponent<Animator>();
         RaycastHit hit;
         if(Physics.Raycast(transform.position, -Vector3.up, out hit)) {
             hit.transform.gameObject.GetComponent<PlayTile>().currentFigure = this;
@@ -36,14 +34,6 @@ public class Figure : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(debugJump){
-            MoveJump(debugTarget);
-            debugJump = false;
-        }
-        if(debugMove){
-            MoveRegular(debugTarget);
-            debugMove = false;
-        }
         if(movingRegular)
         {
             
@@ -79,15 +69,12 @@ public class Figure : MonoBehaviour
     public void MoveRegular(PlayTile targetTile)
     {
         movingRegular = true;
-        newPosition = new Vector3(targetTile.transform.position.x, targetTile.position.y, targetTile.transform.position.z);
-        /*
-        anim.SetTarget(newPosition);
-        anim.StartPlayback();
-        */
+        newPosition = new Vector3(targetTile.transform.position.x, targetTile.transform.position.y + y_offset, targetTile.transform.position.z);
+        Debug.Log(newPosition);
     }
     public void MoveJump(PlayTile targetTile)
     {
         movingJump = true;
-        newPosition = new Vector3(targetTile.transform.position.x, transform.position.y, targetTile.transform.position.z);
+        newPosition = new Vector3(targetTile.transform.position.x, transform.position.y + y_offset, targetTile.transform.position.z);
     }
 }
