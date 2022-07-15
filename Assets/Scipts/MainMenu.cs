@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
-    public TMP_InputField playername1, playernam2, playername3, playername4;
+    public TMP_InputField playername1, playername2, playername3, playername4;
     public GameController con;
     public Toggle toggle1, toggle2, toggle3, toggle4;
     public TMP_Dropdown dropdown1, dropdown2, dropdown3, dropdown4;
@@ -16,8 +16,6 @@ public class MainMenu : MonoBehaviour
         {
             GameObject.Find("Playing Field").SetActive(false);
             GameObject.Find("Nature").SetActive(false);
-            
-            submit.onClick.AddListener(OnSubmit);
         }
     }
 
@@ -68,7 +66,7 @@ public class MainMenu : MonoBehaviour
     }
     public void IsOn()
     {
-        bool[] playersaktiv = new bool[3];
+        bool[] playersaktiv = new bool[4];
         if (toggle1.isOn)
         {
             playersaktiv[0] = true;                
@@ -87,89 +85,9 @@ public class MainMenu : MonoBehaviour
         }
         PlayerKIOut(playersaktiv);
     }
-    public void DoSomething()
-    {
-        Debug.Log("HUSO");
-        foreach (Player player in con.players)
-        {
-            if (player.isActive == true)
-            {
-                Debug.Log("HUSO");
-
-            }
-            //foreach()
-        }
-    }
     public void StoreName()
     {
         PlayerPrefs.SetString("username",playername1.text);
     }
-    void Asd(int b)
-    {
-        if (b == 1)
-        {
-            bool[] playersaktiv = new bool[1];
-            playersaktiv[0] = true; 
-            con.InitializeGame(playersaktiv);
-        }
-        if (b == 2)
-        {
-            bool[] playersaktiv = new bool[2]!;
-            playersaktiv[0] = true;
-            playersaktiv[1] = true;
-            con.InitializeGame(playersaktiv);
-        }
-        if (b == 3)
-        {
-            bool[] playersaktiv = new bool[3]!;
-            con.InitializeGame(playersaktiv);
-            playersaktiv[0] = true;
-            playersaktiv[1] = true;
-            playersaktiv[2] = true;
-        }
-        if (b == 4)
-        {
-            bool[] playersaktiv = new bool[4]!;
-            con.InitializeGame(playersaktiv);
-            playersaktiv[0] = true;
-            playersaktiv[1] = true;
-            playersaktiv[2] = true;
-            playersaktiv[3] = true;
-            
-        }
-    }
-   /* public void Spawner(int a)
-    {
-
-        if(player1.isActive == true)
-        if (a == 5)         
-        {
-            foreach (SpawnPoint p in player1.spawnpoints)
-            {
-                p.Spawn();
-            }
-        }
-        if (a == 6)
-        {
-            foreach (SpawnPoint p in player2.spawnpoints)
-            {
-                p.Spawn();
-            }
-        }
-        if (a == 7)
-        {
-            foreach (SpawnPoint p in player3.spawnpoints)
-            {
-                p.Spawn();
-            }
-        }
-        if (a == 8)
-        {
-            foreach (SpawnPoint p in player4.spawnpoints)
-            {
-                p.Spawn();
-            }
-        }
-    } */
 }
 
