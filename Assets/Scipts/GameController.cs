@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -136,20 +137,39 @@ public class GameController : MonoBehaviour
     }
 
     private bool CheckMoveValid(PlayTile targetTile){
-        Debug.Log("Valid Move?");
+        if(!targetTile.isBase){
+            if(!originTile.isBoat){
+                if(targetTile.currentFigure == null){
+                    if(originTile.Neighbors.Contains(targetTile)){
+                        return true;
+                    }else if(CheckForJump(targetTile)){
+                        return false;
+                    }
+                }
+                
+            }
+        }
+        return false;
+    }
+
+    private bool CheckForJump(PlayTile targetTile){
+        //No jumping to boats!!
         return true;
     }
 
     public void SelectTile(PlayTile tile){
-        if(originTile == null && tile.currentFigure != null){
-            originTile = tile;
+        if(originTile == null){
+            if(tile.currentFigure != null){
+                originTile = tile;
+            }
+            
         }else{
-           if(CheckMoveValid(tile)){
+            if(CheckMoveValid(tile)){
                 MakeMove(tile);
                 originTile = null;
-           }else{
-            originTile = tile;
-           }
+            }else{
+                originTile = tile;
+            }
         }
     }
     public void InitializeGame(bool[] playersActive){
