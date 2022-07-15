@@ -27,6 +27,10 @@ public class Figure : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, -Vector3.up, out hit)) {
+            hit.transform.gameObject.GetComponent<PlayTile>().currentFigure = this;
+        }
     }
 
     // Update is called once per frame
