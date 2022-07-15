@@ -35,22 +35,50 @@ public class GameController : MonoBehaviour
                                                              {null,null,   1,null,null,null,null,   0,   0,null,null,null,null,   4,null,null},
                                                              {null,null,null,null,null,null,null,   0,   0,null,null,null,null,null,null,null},
                                                              {null,null,null,null,null,null,   0,   0,   0,   0,null,null,null,null,null,null}};
+    private Dictionary<Vector2,Figure>[] figureByPosition;
     private Transform trans;
     private PlayTile[] playTiles;
-    private int[] originTile;
+    private PlayTile originTile;
 
     public Player[] players;
+
+    public int winner = 0;
+
+    private int currentPlayer = 0;
+    private bool moveMade = false;
     // Start is called before the first frame update
     void Start()
     {
         trans = gameObject.transform;
         playTiles = GetComponentsInChildren<PlayTile>();
+        /*
+        figureByPosition = new Dictionary<Vector2, Figure>[]
+        {
+            new Dictionary<Vector2, Figure>();
+            new Dictionary<Vector2, Figure>();
+            new Dictionary<Vector2, Figure>();
+            new Dictionary<Vector2, Figure>();
+        };*/
         
     }
 
     // Update is called once per frame
     void Update()
     {
+        if(winner == 0){
+            Debug.Log("Player " + (currentPlayer+1) + "'s turn");
+            if(moveMade){
+                if(currentPlayer < 3){
+                    currentPlayer++;
+                }else{
+                    currentPlayer = 0;
+                }
+                moveMade = false;
+            }
+
+        }else{
+            Debug.Log("Player " + winner + " wins!");
+        }
        // Debug.Log(playing_field_states);
     }
 
@@ -88,48 +116,36 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void MakeMove(int x, int y){
-        	if(originTile is null){
-                originTile[0] = x;
-                originTile[1] = y;
-            }else{
-                if(CheckMoveValid(x, y)){
-                    Debug.Log("Valid move");
-                    playing_field_states[x,y] = playing_field_states[originTile[0],originTile[1]];
-                    playing_field_states[originTile[0],originTile[1]] = 0;
-                }
-            }
-            OutputFieldStates();
-    }
-
-    private bool CheckMoveValid(int x, int y){
-        if(playing_field_states[x,y] == 0){
-            if(originTile[0] != x && originTile[1] != y){
-                if( ((originTile[0] - 1 == x || originTile[1] - 1 == y) || (originTile[0] + 1 == x || originTile[1] +1 == y))){
-                    return true;
-                }
-            }
-            
+    public void MakeMove(PlayTile targetTile){
+        if(!originTile.isBase && !targetTile.isBoat){
+            //Regular Move
+            playing_field_states[(int)targetTile.position.x,(int)targetTile.position.y] = currentPlayer;
+            playing_field_states[(int)originTile.position.x,(int)originTile.position.y] = 0;
+        }else if(originTile.isBase){
+            //TODO
+        }else if(targetTile.isBoat){
+            //TODO
         }
-        return false;
+        originTile = null;
+        moveMade = true;
     }
 
-    private void OutputFieldStates(){
-        string line = "";
-        for(int y = 0; y < 16; y++){
-            for(int x = 0; x < 16; x++){
-                if(playing_field_states[x,y] is null){
-                    line += "x";
-                }
-                else{
-                    line += playing_field_states[x,y];
-                }
-            }
-            Debug.Log(line);
-            line = "";
+    private bool CheckMoveValid(PlayTile targetTile){
+       
+        return true;
+    }
+
+    public void SelectTile(PlayTile tile){
+        if(originTile == null){
+            originTile = tile;
+        }else{
+           if(CheckMoveValid(tile)){
+                MakeMove(tile);
+           }else{
+            originTile = tile;
+           }
         }
     }
-
     public void InitializeGame(bool[] playersActive){
         int j = 0;
         foreach(Player p in players)
@@ -159,4 +175,13 @@ public class GameController : MonoBehaviour
             tile.state =(int) playing_field_states[(int) tile.position.x,(int) tile.position.y];
         }
     }
+    /*
+    private void InitializeFigureList(bool[] playersActive){
+        for(int i = 0; i < playersActive.Length; i++){
+            if(playersActive[i])
+            {
+                figureByPosition[i].Add()
+            }
+        }
+    }*/
 }
