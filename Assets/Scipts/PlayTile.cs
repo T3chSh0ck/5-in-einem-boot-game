@@ -11,6 +11,8 @@ public class PlayTile : MonoBehaviour
     public Vector2 position;
     public int state = 0;
     public PlayTile[] Neighbors; //Clockwise, starting "north" (-x)
+    public bool isBase = false;
+    public bool isBoat = false;
     private Renderer rend;
     private bool selected = false;
     private int[] origin = new int[2] {-44, -176};
@@ -37,22 +39,29 @@ public class PlayTile : MonoBehaviour
 
     void OnMouseEnter()
     {
-        if(!selected){
+        if(!isBase && !isBoat){
+            if(!selected){
             rend.material = HoverMaterial;
+            }
         }
+        
     }
 
     void OnMouseExit()
     {
-        if(!selected){
-            rend.material = NormalMaterial;
+        if(!isBase && !isBoat){
+            if(!selected){
+                rend.material = NormalMaterial;
+            }
         }
     }
 
     void OnMouseDown(){
         if(!selected){
             controller.ResetFieldStates();
-            rend.material = SelectedMaterial;
+            if(!isBase && !isBoat){
+                rend.material = SelectedMaterial;
+            }
             selected = true;
             //var coords = convertCoordinatesToBoard(transform.position.z, transform.position.x);
             //controller.MakeMove(coords[0],coords[1]);
@@ -65,7 +74,11 @@ public class PlayTile : MonoBehaviour
 
     public void ResetState(){
         selected = false;
-        rend.material = NormalMaterial;
+        if(!isBase && !isBoat)
+        {
+            rend.material = NormalMaterial;
+        }
+        
     }
 
     public bool IsMovePossible(Vector2 Target){
