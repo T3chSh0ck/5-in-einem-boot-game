@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 0}
   Figure: {fileID: 6616481196701997542, guid: c5c8f980ac4865742b269bd1906f1955, type: 3}
-  offset: {x: 0, y: 10, z: 0}
+  offset: {x: 0, y: 8, z: 0}
 --- !u!114 &8365531599904036812
 MonoBehaviour:
   m_ObjectHideFlags: 0

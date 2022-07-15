@@ -74,6 +74,6 @@ public class Figure : MonoBehaviour
     public void MoveJump(PlayTile targetTile)
     {
         movingJump = true;
-        newPosition = new Vector3(targetTile.transform.position.x, transform.position.y + y_offset, targetTile.transform.position.z);
+        newPosition = new Vector3(targetTile.transform.position.x, targetTile.transform.position.y + y_offset, targetTile.transform.position.z);
     }
 }

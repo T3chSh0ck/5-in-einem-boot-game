@@ -113,7 +113,4 @@ MonoBehaviour:
   playerNr: 0
   movingRegular: 0
   movingJump: 0
-  y_offset: 5
-  debugJump: 0
-  debugMove: 0
-  debugTarget: {fileID: 0}
+  y_offset: 8

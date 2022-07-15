@@ -112,6 +112,8 @@ public class GameController : MonoBehaviour
             //TODO
         }
         originTile.MakeMove(targetTile);
+
+        
         originTile = null;
         moveMade = true;
     }
@@ -129,23 +131,45 @@ public class GameController : MonoBehaviour
                 
             }
         }
+        if(CheckForJump(targetTile)){
+            return true;
+        }
         return false;
     }
 
     private bool CheckForJump(PlayTile targetTile){
         //No jumping to boats!!
-        if(!targetTile.isBoat){
-            
+        for(int i = 0; i < 8; i++)
+        {
+            if(originTile.Neighbors[i] != null)
+            {
+                if(originTile.Neighbors[i].Neighbors[i] != null)
+                {
+                    if(originTile.Neighbors[i].Neighbors[i] == targetTile)
+                    {
+                        if(originTile.Neighbors[i].currentFigure != null)
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+                    
         }
-        return true;
+        return false;
     }
 
     public void SelectTile(PlayTile tile){
+        if(originTile == tile){
+            originTile = null;
+            return;
+        } 
+
         if(originTile == null){
             if(tile.currentFigure != null){
                 originTile = tile;
             }
-            
+           
         }else{
             if(CheckMoveValid(tile)){
                 MakeMove(tile);
