@@ -10,12 +10,14 @@ public class MainMenu : MonoBehaviour
     public Toggle toggle1, toggle2, toggle3, toggle4;
     public TMP_Dropdown dropdown1, dropdown2, dropdown3, dropdown4;
     public Button submit;
+    public GameObject Playground, Nature, Menu;
     // Start is called before the first frame update
     void Start()
     {
         {
-            GameObject.Find("Playing Field").SetActive(false);
-            GameObject.Find("Nature").SetActive(false);
+            Playground.SetActive(false);
+            Nature.SetActive(false);
+            Menu.SetActive(true);
         }
     }
 
@@ -62,6 +64,9 @@ public class MainMenu : MonoBehaviour
     }
     public void OnSubmit()
     {
+        Playground.SetActive(true);
+        Nature.SetActive(true);
+        Menu.SetActive(false);
         IsOn();
     }
     public void IsOn()
