@@ -91,9 +91,15 @@ public class PlayTile : MonoBehaviour
         }else{
             currentFigure.MoveJump(targetTile);
         }
+        if(targetTile.isBoat){
+            currentFigure.transform.SetParent(targetTile.transform,true);
+            targetTile.currentFigure = null;
+        }else{
+            
+            targetTile.ResetState();
+            targetTile.currentFigure = currentFigure;
+        }
         ResetState();
-        targetTile.ResetState();
-        targetTile.currentFigure = currentFigure;
         currentFigure = null;	
     }
 
@@ -106,7 +112,6 @@ public class PlayTile : MonoBehaviour
         // boardy = (realy + 198)/22
 
         Vector2 boardCoords = new Vector2((x - origin[0])/22, (y - origin[1])/22);
-        Debug.Log(boardCoords);
         return boardCoords;
     }
 }

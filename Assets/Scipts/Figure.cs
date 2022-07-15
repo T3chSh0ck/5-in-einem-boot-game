@@ -69,7 +69,6 @@ public class Figure : MonoBehaviour
     {
         movingRegular = true;
         newPosition = new Vector3(targetTile.transform.position.x, targetTile.transform.position.y + y_offset, targetTile.transform.position.z);
-        Debug.Log(newPosition);
     }
     public void MoveJump(PlayTile targetTile)
     {
