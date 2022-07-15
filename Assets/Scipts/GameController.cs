@@ -152,7 +152,7 @@ public class GameController : MonoBehaviour
         }else if(targetTile.isBoat){
             BoatFigures[currentPlayer] += 1;
             if(BoatFigures[currentPlayer] >= 5){
-                winner = currentPlayer;
+                winner = currentPlayer + 1;
             }
             RotateBoats();
         }
