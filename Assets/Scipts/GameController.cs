@@ -128,7 +128,9 @@ public class GameController : MonoBehaviour
                 for (int i = 0; i < n.Neighbors.Length; i++)
                 {
                     if(n.Neighbors[i] != null){
-                        n.Neighbors[i] = boat;
+                        if(n.Neighbors[i].isBoat){
+                            n.Neighbors[i] = boat;
+                        }
                     }
                 }   
             }
