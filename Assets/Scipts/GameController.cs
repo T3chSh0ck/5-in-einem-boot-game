@@ -48,29 +48,18 @@ public class GameController : MonoBehaviour
 
     private int currentPlayer = 0;
     private bool moveMade = false;
-    private Figure[] allFigures;
-    // Start is called before the first frame update
+    public Figure[] allFigures;
+
     void Start()
     {
         trans = gameObject.transform;
         playTiles = GetComponentsInChildren<PlayTile>();
-        
-        /*
-        figureByPosition = new Dictionary<Vector2, Figure>[]
-        {
-            new Dictionary<Vector2, Figure>();
-            new Dictionary<Vector2, Figure>();
-            new Dictionary<Vector2, Figure>();
-            new Dictionary<Vector2, Figure>();
-        };*/
-        
     }
 
-    // Update is called once per frame
+
     void Update()
     {
         if(winner == 0){
-            Debug.Log("Player " + (currentPlayer+1) + "'s turn");
             if(moveMade){
                 if(currentPlayer < 3){
                     currentPlayer++;
@@ -79,23 +68,15 @@ public class GameController : MonoBehaviour
                 }
                 moveMade = false;
             }
-
         }else{
             Debug.Log("Player " + winner + " wins!");
         }
-       // Debug.Log(playing_field_states);
     }
 
     void UpdatePlacements()
     {
 
     }
-
-    /*PlayTile getTileAtCoordinates(int x, int y)
-    {
-
-    }*/
-
     
 
     int[] convertBoardToCoordinates(int x, int y)
@@ -153,6 +134,9 @@ public class GameController : MonoBehaviour
 
     private bool CheckForJump(PlayTile targetTile){
         //No jumping to boats!!
+        if(!targetTile.isBoat){
+            
+        }
         return true;
     }
 
