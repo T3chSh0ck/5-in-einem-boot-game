@@ -46,11 +46,13 @@ public class GameController : MonoBehaviour
 
     private int currentPlayer = 0;
     private bool moveMade = false;
+    private Figure[] allFigures;
     // Start is called before the first frame update
     void Start()
     {
         trans = gameObject.transform;
         playTiles = GetComponentsInChildren<PlayTile>();
+        
         /*
         figureByPosition = new Dictionary<Vector2, Figure>[]
         {
@@ -148,8 +150,7 @@ public class GameController : MonoBehaviour
     }
     public void InitializeGame(bool[] playersActive){
         int j = playersActive.Length;
-        playingfield.SetActive(false);
-        Nature.SetActive(false);
+        allFigures = FindObjectsOfType<Figure>();
 
         foreach (Player p in players)
         {
@@ -180,15 +181,21 @@ public class GameController : MonoBehaviour
         foreach(PlayTile tile in playTiles)
         {
             tile.state =(int) playing_field_states[(int) tile.position.x,(int) tile.position.y];
-        }
-    }
-    /*
-    private void InitializeFigureList(bool[] playersActive){
-        for(int i = 0; i < playersActive.Length; i++){
-            if(playersActive[i])
+            if (playing_field_states[(int) tile.position.x,(int) tile.position.y] > 0)
             {
-                figureByPosition[i].Add()
+                tile.currentFigure = FindFigureAtCoordinates(tile.transform.position,5);
             }
         }
-    }*/
+    }
+
+    private Figure FindFigureAtCoordinates(Vector3 targetPos, int offset_y){
+        Vector3 off = new Vector3(0, offset_y, 0);
+        foreach (Figure fig in allFigures)
+        {
+            if(fig.transform.position == (targetPos-off)){
+                return fig;
+            }
+        }
+        return null;
+    }
 }

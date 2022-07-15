@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNr: 0
-  movingRegular: 1
+  movingRegular: 0
 --- !u!95 &2772252143896563671
 Animator:
   serializedVersion: 4

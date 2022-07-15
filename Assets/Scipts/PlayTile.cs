@@ -13,6 +13,7 @@ public class PlayTile : MonoBehaviour
     public PlayTile[] Neighbors; //Clockwise, starting "north" (-x)
     public bool isBase = false;
     public bool isBoat = false;
+    public Figure currentFigure;
     private Renderer rend;
     private bool selected = false;
     private int[] origin = new int[2] {-44, -176};
@@ -83,6 +84,11 @@ public class PlayTile : MonoBehaviour
 
     public bool IsMovePossible(Vector2 Target){
         return true;
+    }
+
+    public void MakeMove(PlayTile targetTile){
+        targetTile.currentFigure = currentFigure;
+        currentFigure = null;	
     }
 
     private Vector2 convertCoordinatesToBoard(int x, int y)

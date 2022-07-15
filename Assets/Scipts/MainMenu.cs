@@ -13,8 +13,8 @@ public class MainMenu : MonoBehaviour
     void Start()
     {
         {
-            GameObject.Find("Playing Field").active = false;
-            GameObject.Find("Nature").active = false;
+            GameObject.Find("Playing Field").SetActive(false);
+            GameObject.Find("Nature").SetActive(false);
             button1.onClick.AddListener(() => Asd(1));
             button2.onClick.AddListener(() => Asd(2));
             button3.onClick.AddListener(() => Asd(3));
@@ -42,7 +42,7 @@ public class MainMenu : MonoBehaviour
                 Debug.Log("HUSO");
 
             }
-            ´foreach()
+            //foreach()
         }
     }
     public void StoreName()
