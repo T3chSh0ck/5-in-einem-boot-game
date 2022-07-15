@@ -13,7 +13,9 @@ public class Figure : MonoBehaviour
     public float y_offset = 10;
 
     Vector3 newPosition;
-
+    public bool movedToBoat;
+    private Vector3[] offsetOnBoat;
+    public int boatSeat;
     /*
     public Figure(Vector3 position, Color col, int playerNr)
     {
@@ -28,6 +30,13 @@ public class Figure : MonoBehaviour
         if(Physics.Raycast(transform.position, -Vector3.up, out hit)) {
             hit.transform.gameObject.GetComponent<PlayTile>().currentFigure = this;
         }
+        offsetOnBoat = new Vector3[]{
+            new Vector3(-0.00139999995f,-0.0174499992f,0.0104f),
+            new Vector3(0.00810000021f,-0.0105299996f,0.0104f),
+            new Vector3(-0.0114000002f,-0.00488999998f,0.0104f),
+            new Vector3(0.00989999995f,0.00987999979f,0.0104f),
+            new Vector3(-0.00789999962f,0.0161899999f,0.0104f)
+        };
     }
 
     // Update is called once per frame
@@ -44,6 +53,10 @@ public class Figure : MonoBehaviour
                 {
                     performedFrames = 0;
                     movingRegular = false;
+                    if(movedToBoat){
+                        transform.localPosition = offsetOnBoat[boatSeat];
+                        movedToBoat = false;
+                    }
                 }
                 
             }

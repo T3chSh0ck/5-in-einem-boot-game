@@ -17,6 +17,10 @@ public class PlayTile : MonoBehaviour
     private Renderer rend;
     private bool selected = false;
     private int[] origin = new int[2] {-44, -176};
+
+    public int figuresOnBoat;
+    public int boatColor;
+
     
     // Start is called before the first frame update
     private void OnDrawGizmos() 
@@ -34,6 +38,7 @@ public class PlayTile : MonoBehaviour
     
     void Start()
     {
+
         rend = GetComponent<Renderer>();
         position = convertCoordinatesToBoard((int) transform.localPosition.z, (int) transform.localPosition.x);
     }
@@ -89,11 +94,19 @@ public class PlayTile : MonoBehaviour
         if(Mathf.Abs(targetTile.position.x-position.x) <=1 && Mathf.Abs(targetTile.position.y-position.y) <= 1){
             currentFigure.MoveRegular(targetTile);
         }else{
-            currentFigure.MoveJump(targetTile);
+            if(targetTile.isBoat){
+                currentFigure.boatSeat = targetTile.figuresOnBoat;
+                targetTile.figuresOnBoat++;
+                currentFigure.MoveRegular(targetTile);
+            }else{
+                currentFigure.MoveJump(targetTile);
+            }
+            
         }
         if(targetTile.isBoat){
             currentFigure.transform.SetParent(targetTile.transform,true);
             targetTile.currentFigure = null;
+            currentFigure.movedToBoat = true;
         }else{
             
             targetTile.ResetState();

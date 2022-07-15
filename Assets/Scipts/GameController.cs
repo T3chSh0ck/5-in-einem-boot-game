@@ -17,7 +17,7 @@ public class GameController : MonoBehaviour
      */
 
     private int[] HomeFigures = new int[4] { 5, 5, 5, 5 };
-    private int[] BoatFigures = new int[4] { 0, 0, 0, 0 };
+    public int[] BoatFigures = new int[4] { 0, 0, 0, 0 };
     // BoatPositions: {N, E, S, W}
     private int[] BoatPositions = new int[4] { 1, 2, 3, 4 };
 
@@ -37,6 +37,7 @@ public class GameController : MonoBehaviour
                                                              {null,null,   1,null,null,null,null,   0,   0,null,null,null,null,   4,null,null},
                                                              {null,null,null,null,null,null,null,   0,   0,null,null,null,null,null,null,null},
                                                              {null,null,null,null,null,null,   0,   0,   0,   0,null,null,null,null,null,null}};
+    private Vector3[] figureOffsetOnBoat;
     private Dictionary<Vector2,Figure>[] figureByPosition;
     private Transform trans;
     private PlayTile[] playTiles;
@@ -47,7 +48,7 @@ public class GameController : MonoBehaviour
 
     public int winner = 0;
 
-    private int currentPlayer = 0;
+    public int currentPlayer = 0;
     private bool moveMade = false;
     public Figure[] allFigures;
     public GameObject BoatPivot;
@@ -60,6 +61,13 @@ public class GameController : MonoBehaviour
     {
         trans = gameObject.transform;
         playTiles = GetComponentsInChildren<PlayTile>();
+        figureOffsetOnBoat = new Vector3[]{
+            new Vector3(-0.00139999995f,-0.0174499992f,0.0104f),
+            new Vector3(0.00810000021f,-0.0105299996f,0.0104f),
+            new Vector3(-0.0114000002f,-0.00488999998f,0.0104f),
+            new Vector3(0.00989999995f,0.00987999979f,0.0104f),
+            new Vector3(-0.00789999962f,0.0161899999f,0.0104f)
+        };
     }
 
 
@@ -149,12 +157,16 @@ public class GameController : MonoBehaviour
             RotateBoats();
         }
         originTile.MakeMove(targetTile);
-
         originTile = null;
         moveMade = true;
     }
 
     private bool CheckMoveValid(PlayTile targetTile){
+        if(targetTile.isBoat){
+            if(targetTile.boatColor != currentPlayer){
+                return false;
+            }
+        }
         if(!targetTile.isBase){
             if(!originTile.isBoat){
                 if(targetTile.currentFigure == null){
@@ -164,9 +176,8 @@ public class GameController : MonoBehaviour
                         return false;
                     }
                 }
-                
             }
-        }
+        }else 
         if(CheckForJump(targetTile)){
             return true;
         }
@@ -174,7 +185,6 @@ public class GameController : MonoBehaviour
     }
 
     private bool CheckForJump(PlayTile targetTile){
-        //No jumping to boats!!
         for(int i = 0; i < 8; i++)
         {
             if(originTile.Neighbors[i] != null)
