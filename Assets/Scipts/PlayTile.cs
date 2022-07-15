@@ -60,13 +60,12 @@ public class PlayTile : MonoBehaviour
     void OnMouseDown(){
         if(!selected){
             controller.ResetFieldStates();
-            if(!isBase && !isBoat){
+            if(!isBase && !isBoat && currentFigure != null){
                 rend.material = SelectedMaterial;
+                selected = true;
             }
-            selected = true;
-            //var coords = convertCoordinatesToBoard(transform.position.z, transform.position.x);
-            //controller.MakeMove(coords[0],coords[1]);
-            //convertCoordinatesToBoard(transform.position.z, transform.position.x);
+            
+            controller.SelectTile(this);
         }else{
             ResetState();
         }
@@ -87,6 +86,13 @@ public class PlayTile : MonoBehaviour
     }
 
     public void MakeMove(PlayTile targetTile){
+        if(Mathf.Abs(targetTile.position.x-position.x) <=1 && Mathf.Abs(targetTile.position.y-position.y) <= 1){
+            currentFigure.MoveRegular(targetTile);
+        }else{
+            currentFigure.MoveJump(targetTile);
+        }
+        ResetState();
+        targetTile.ResetState();
         targetTile.currentFigure = currentFigure;
         currentFigure = null;	
     }

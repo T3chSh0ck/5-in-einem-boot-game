@@ -19,17 +19,22 @@ public class Player : MonoBehaviour
     void Update()
     {
     }
+
     public void SpawnFigures(){
         {
-            
             if (isActive == true)
             {
-                Debug.Log("drin");
+                foreach (SpawnPoint sp in spawnpoints)
+                {
+                    sp.Spawn();
+                }
             }
         }
         
     }
+
     public void InitializePlayer(bool playersaktiv){
         isActive = playersaktiv;
+        SpawnFigures();
     }
 }

@@ -23,6 +23,10 @@ public class Figure : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
+        RaycastHit hit;
+        if(Physics.Raycast(transform.position, -Vector3.up, out hit)) {
+            hit.transform.gameObject.GetComponent<PlayTile>().currentFigure = this;
+        }
     }
 
     // Update is called once per frame
@@ -44,7 +48,19 @@ public class Figure : MonoBehaviour
             }
             
         }else if(movingJump){
-
+            if(movementFramesJump >= performedFrames)
+            {
+                Vector3 JumpVector = new Vector3(0, Mathf.Sin((performedFrames/movementFramesJump) * Mathf.PI), 0);
+                transform.position = Vector3.Lerp(transform.position, newPosition, performedFrames/movementFramesJump) + JumpVector * 20;
+                performedFrames++;
+                if(performedFrames == movementFramesJump)
+                {
+                    performedFrames = 0;
+                    movingJump = false;
+                    transform.position = newPosition;
+                }
+                
+            }
         }
     }
 
