@@ -5,13 +5,17 @@ using UnityEngine;
 public class Figure : MonoBehaviour
 {
     private float movementFramesRegular = 60;
+    private float movementFramesJump = 240;
     private float performedFrames = 0;
     public int playerNr;
     public bool movingRegular = true;
-    bool movingJump = false;
-
+    public bool movingJump = false;
     Vector3 newPosition;
     Animator anim;
+
+    public bool debugJump = false;
+    public bool debugMove = false;
+    public PlayTile debugTarget;
     /*
     public Figure(Vector3 position, Color col, int playerNr)
     {
@@ -28,6 +32,14 @@ public class Figure : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(debugJump){
+            MoveJump(debugTarget);
+            debugJump = false;
+        }
+        if(debugMove){
+            MoveRegular(debugTarget);
+            debugMove = false;
+        }
         if(movingRegular)
         {
             
@@ -44,17 +56,35 @@ public class Figure : MonoBehaviour
             }
             
         }else if(movingJump){
-
+            if(movementFramesJump >= performedFrames)
+            {
+                Vector3 JumpVector = new Vector3(0, Mathf.Sin((performedFrames/movementFramesJump) * Mathf.PI), 0);
+                Debug.Log(JumpVector.y);
+                transform.position = Vector3.Lerp(transform.position, newPosition, performedFrames/movementFramesJump) + JumpVector * 20;
+                performedFrames++;
+                if(performedFrames == movementFramesJump)
+                {
+                    performedFrames = 0;
+                    movingJump = false;
+                    transform.position = newPosition;
+                }
+                
+            }
         }
     }
 
-    void MoveRegular(PlayTile targetTile)
+    public void MoveRegular(PlayTile targetTile)
     {
         movingRegular = true;
-        newPosition = new Vector3(targetTile.transform.position.x, transform.position.y, targetTile.transform.position.z);
+        newPosition = new Vector3(targetTile.transform.position.x, targetTile.position.y, targetTile.transform.position.z);
         /*
         anim.SetTarget(newPosition);
         anim.StartPlayback();
         */
+    }
+    public void MoveJump(PlayTile targetTile)
+    {
+        movingJump = true;
+        newPosition = new Vector3(targetTile.transform.position.x, transform.position.y, targetTile.transform.position.z);
     }
 }

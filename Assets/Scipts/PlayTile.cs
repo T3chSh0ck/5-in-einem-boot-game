@@ -87,9 +87,18 @@ public class PlayTile : MonoBehaviour
     }
 
     public void MakeMove(PlayTile targetTile){
+        if(Mathf.Abs(targetTile.position.x-position.x) <=1 && Mathf.Abs(targetTile.position.y-position.y) <= 1){
+            currentFigure.MoveRegular(targetTile);
+        }else{
+            currentFigure.MoveJump(targetTile);
+        }
+        
+        
         targetTile.currentFigure = currentFigure;
-        currentFigure = null;	
+        currentFigure = null;
+        	
     }
+
 
     private Vector2 convertCoordinatesToBoard(int x, int y)
     {

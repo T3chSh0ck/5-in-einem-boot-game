@@ -68,7 +68,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         if(winner == 0){
-            Debug.Log("Player " + (currentPlayer+1) + "'s turn");
+            //Debug.Log("Player " + (currentPlayer+1) + "'s turn");
             if(moveMade){
                 if(currentPlayer < 3){
                     currentPlayer++;
@@ -128,6 +128,7 @@ public class GameController : MonoBehaviour
         }else if(targetTile.isBoat){
             //TODO
         }
+        targetTile.MakeMove(targetTile);
         originTile = null;
         moveMade = true;
     }
