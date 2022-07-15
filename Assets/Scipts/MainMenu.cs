@@ -7,24 +7,24 @@ public class MainMenu : MonoBehaviour
 {
     public TMP_InputField playername1, playername2, playername3, playername4;
     public GameController con;
-    public Toggle toggle1, toggle2, toggle3, toggle4;
+    public Toggle toggle1, toggle2, toggle3, toggle4, rule;
     public TMP_Dropdown dropdown1, dropdown2, dropdown3, dropdown4;
     public Button submit;
-    public GameObject Playground, Nature, Menu;
+    public GameObject playground, nature, menu, rulewindow, rules, ruleee;
     // Start is called before the first frame update
     void Start()
     {
         {
-            Playground.SetActive(false);
-            Nature.SetActive(false);
-            Menu.SetActive(true);
+            playground.SetActive(false);
+            nature.SetActive(false);
+            rulewindow.SetActive(false);
+            menu.SetActive(true);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-
     }
     public void PlayerKIOut(bool[] a)
     {
@@ -62,11 +62,24 @@ public class MainMenu : MonoBehaviour
         }
         con.InitializeGame(a);
     }
+    public void RuleButton()
+    {
+        if (rule.isOn)
+        {
+            ruleee.SetActive(true);
+        }
+        else
+        {
+            ruleee.SetActive(false);
+        }
+    }
     public void OnSubmit()
     {
-        Playground.SetActive(true);
-        Nature.SetActive(true);
-        Menu.SetActive(false);
+        playground.SetActive(true);
+        nature.SetActive(true);
+        menu.SetActive(false);
+        rulewindow.SetActive(true);
+        ruleee.SetActive(false);
         IsOn();
     }
     public void IsOn()
