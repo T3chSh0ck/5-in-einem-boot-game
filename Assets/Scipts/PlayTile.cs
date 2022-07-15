@@ -109,7 +109,6 @@ public class PlayTile : MonoBehaviour
         // boardy = (realy + 198)/22
 
         Vector2 boardCoords = new Vector2((x - origin[0])/22, (y - origin[1])/22);
-        Debug.Log(boardCoords);
         return boardCoords;
     }
 }
