@@ -38,7 +38,7 @@ public class GameController : MonoBehaviour
     private Transform trans;
     private PlayTile[] playTiles;
     private int[] originTile;
-
+    public GameObject playingfield, Nature;
     public Player[] players;
     // Start is called before the first frame update
     void Start()
@@ -125,19 +125,26 @@ public class GameController : MonoBehaviour
                     line += playing_field_states[x,y];
                 }
             }
-            Debug.Log(line);
+            //Debug.Log(line);
             line = "";
         }
     }
 
     public void InitializeGame(bool[] playersActive){
-        int j = 0;
-        foreach(Player p in players)
+        int j = playersActive.Length;
+        playingfield.SetActive(false);
+        Nature.SetActive(false);
+
+        foreach (Player p in players)
         {
-            p.InitializePlayer(playersActive[j++]);
+            for (int i = 0; i < playersActive.Length; i++)
+            {
+                p.InitializePlayer(playersActive[i]);
+            }
         }
 
-        for(int i = 0; i < playersActive.Length; i++)
+
+        for (int i = 0; i < playersActive.Length; i++)
         {
             if(!playersActive[i])
             {

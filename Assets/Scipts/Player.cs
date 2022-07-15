@@ -9,6 +9,7 @@ public class Player : MonoBehaviour
     public Color color;
     public SpawnPoint[] spawnpoints;
     public bool isActive;
+    public GameController con;
     // Start is called before the first frame update
     void Start()
     {
@@ -18,18 +19,17 @@ public class Player : MonoBehaviour
     void Update()
     {
     }
-
     public void SpawnFigures(){
-        if(isActive){
-            foreach(SpawnPoint spawn in spawnpoints){
-                spawn.Spawn();
+        {
+            
+            if (isActive == true)
+            {
+                Debug.Log("drin");
             }
         }
         
     }
-
-    public void InitializePlayer(bool active){
-        isActive = active;
-        SpawnFigures();
+    public void InitializePlayer(bool playersaktiv){
+        isActive = playersaktiv;
     }
 }

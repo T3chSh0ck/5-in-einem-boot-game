@@ -5,24 +5,24 @@ using UnityEngine;
 using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
-    public GameObject menu, menu1, menu2, menu3; 
-    public Button button1, button2, button3, button4, choosecolorblue, choosecolorgreen, choosecolorred, choosecoloryellow, submit;
-    public Player player1, player2, player3, player4;
+    public GameObject menu, menu1, menu2, menu3;
+    public Button button1, button2, button3, button4, choosecolorblue, choosecolorgreen, choosecolorred, choosecoloryellow, submit1;
     public TMP_InputField playername;
     public GameController con;
     // Start is called before the first frame update
     void Start()
     {
         {
-            submit.onClick.AddListener(()=> StoreName());
-            button1.onClick.AddListener(() => Spawner(1));
-            button2.onClick.AddListener(() => Spawner(2));
-            button3.onClick.AddListener(() => Spawner(3));
-            button4.onClick.AddListener(() => Spawner(4));
-            choosecolorblue.onClick.AddListener(() => Spawner(5));
+            GameObject.Find("Playing Field").active = false;
+            GameObject.Find("Nature").active = false;
+            button1.onClick.AddListener(() => Asd(1));
+            button2.onClick.AddListener(() => Asd(2));
+            button3.onClick.AddListener(() => Asd(3));
+            button4.onClick.AddListener(() => Asd(4));
+            /*  choosecolorblue.onClick.AddListener(() => Spawner(5));
             choosecolorgreen.onClick.AddListener(() => Spawner(6));
             choosecolorred.onClick.AddListener(() => Spawner(7));
-            choosecoloryellow.onClick.AddListener(() => Spawner(8));
+            choosecoloryellow.onClick.AddListener(() => Spawner(8));*/
         }
     }
 
@@ -31,17 +31,64 @@ public class MainMenu : MonoBehaviour
     {
         
     }
+    public void DoSomething()
+    {
+        Debug.Log("HUSO");
+        menu1.SetActive(false);
+        foreach (Player player in con.players)
+        {
+            if (player.isActive == true)
+            {
+                Debug.Log("HUSO");
+
+            }
+            ´foreach()
+        }
+    }
     public void StoreName()
     {
         PlayerPrefs.SetString("username",playername.text);
     }
-
-    public void Spawner(int a)
+    void Asd(int b)
     {
-        if (a == 5)
-           
+        if (b == 1)
         {
+            bool[] playersaktiv = new bool[1];
+            playersaktiv[0] = true; 
+            con.InitializeGame(playersaktiv);
+        }
+        if (b == 2)
+        {
+            bool[] playersaktiv = new bool[2]!;
+            playersaktiv[0] = true;
+            playersaktiv[1] = true;
+            con.InitializeGame(playersaktiv);
+        }
+        if (b == 3)
+        {
+            bool[] playersaktiv = new bool[3]!;
+            con.InitializeGame(playersaktiv);
+            playersaktiv[0] = true;
+            playersaktiv[1] = true;
+            playersaktiv[2] = true;
+        }
+        if (b == 4)
+        {
+            bool[] playersaktiv = new bool[4]!;
+            con.InitializeGame(playersaktiv);
+            playersaktiv[0] = true;
+            playersaktiv[1] = true;
+            playersaktiv[2] = true;
+            playersaktiv[3] = true;
+            
+        }
+    }
+   /* public void Spawner(int a)
+    {
 
+        if(player1.isActive == true)
+        if (a == 5)         
+        {
             foreach (SpawnPoint p in player1.spawnpoints)
             {
                 p.Spawn();
@@ -68,6 +115,6 @@ public class MainMenu : MonoBehaviour
                 p.Spawn();
             }
         }
-    } 
+    } */
 }
 
