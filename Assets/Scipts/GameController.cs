@@ -48,14 +48,13 @@ public class GameController : MonoBehaviour
 
     private int currentPlayer = 0;
     private bool moveMade = false;
-    public Figure[] allFigures;
+    private Figure[] allFigures;
     // Start is called before the first frame update
     void Start()
     {
         trans = gameObject.transform;
         playTiles = GetComponentsInChildren<PlayTile>();
-        bool[] debugActiveList = new bool[]{true, true, true, true};
-        InitializeGame(debugActiveList);
+        
         /*
         figureByPosition = new Dictionary<Vector2, Figure>[]
         {
@@ -71,7 +70,7 @@ public class GameController : MonoBehaviour
     void Update()
     {
         if(winner == 0){
-            //Debug.Log("Player " + (currentPlayer+1) + "'s turn");
+            Debug.Log("Player " + (currentPlayer+1) + "'s turn");
             if(moveMade){
                 if(currentPlayer < 3){
                     currentPlayer++;

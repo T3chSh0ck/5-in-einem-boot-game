@@ -5,7 +5,6 @@ using UnityEngine;
 public class Figure : MonoBehaviour
 {
     private float movementFramesRegular = 60;
-    private float movementFramesJump = 240;
     private float performedFrames = 0;
     public int playerNr;
     public bool movingRegular = true;
@@ -13,7 +12,6 @@ public class Figure : MonoBehaviour
     public float y_offset = 10;
 
     Vector3 newPosition;
-
 
     /*
     public Figure(Vector3 position, Color col, int playerNr)
@@ -66,7 +64,7 @@ public class Figure : MonoBehaviour
         }
     }
 
-    public void MoveRegular(PlayTile targetTile)
+    void MoveRegular(PlayTile targetTile)
     {
         movingRegular = true;
         newPosition = new Vector3(targetTile.transform.position.x, targetTile.transform.position.y + y_offset, targetTile.transform.position.z);

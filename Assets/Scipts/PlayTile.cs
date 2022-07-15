@@ -94,10 +94,8 @@ public class PlayTile : MonoBehaviour
         ResetState();
         targetTile.ResetState();
         targetTile.currentFigure = currentFigure;
-        currentFigure = null;
-        	
+        currentFigure = null;	
     }
-
 
     private Vector2 convertCoordinatesToBoard(int x, int y)
     {
@@ -108,6 +106,7 @@ public class PlayTile : MonoBehaviour
         // boardy = (realy + 198)/22
 
         Vector2 boardCoords = new Vector2((x - origin[0])/22, (y - origin[1])/22);
+        Debug.Log(boardCoords);
         return boardCoords;
     }
 }
