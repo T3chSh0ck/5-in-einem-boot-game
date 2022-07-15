@@ -5,36 +5,91 @@ using UnityEngine;
 using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
-    public GameObject menu, menu1, menu2, menu3;
-    public Button button1, button2, button3, button4, choosecolorblue, choosecolorgreen, choosecolorred, choosecoloryellow, submit1;
-    public TMP_InputField playername;
+    public TMP_InputField playername1, playernam2, playername3, playername4;
     public GameController con;
+    public Toggle toggle1, toggle2, toggle3, toggle4;
+    public TMP_Dropdown dropdown1, dropdown2, dropdown3, dropdown4;
+    public Button submit;
     // Start is called before the first frame update
     void Start()
     {
         {
             GameObject.Find("Playing Field").SetActive(false);
             GameObject.Find("Nature").SetActive(false);
-            button1.onClick.AddListener(() => Asd(1));
-            button2.onClick.AddListener(() => Asd(2));
-            button3.onClick.AddListener(() => Asd(3));
-            button4.onClick.AddListener(() => Asd(4));
-            /*  choosecolorblue.onClick.AddListener(() => Spawner(5));
-            choosecolorgreen.onClick.AddListener(() => Spawner(6));
-            choosecolorred.onClick.AddListener(() => Spawner(7));
-            choosecoloryellow.onClick.AddListener(() => Spawner(8));*/
+            
+            submit.onClick.AddListener(OnSubmit);
         }
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+    public void PlayerKIOut(bool[] a)
+    {
+        switch (dropdown1.value)
+        {
+            case 0:
+                StoreName();
+                break;
+            case 1:
+                break;
+        }
+        switch (dropdown1.value)
+        {
+            case 0:
+                StoreName();
+                break;
+            case 1:
+                break;
+        }
+        switch (dropdown1.value)
+        {
+            case 0:
+                StoreName();
+                break;
+            case 1:
+                break;
+        }
+        switch (dropdown1.value)
+        {
+            case 0:
+                StoreName();
+                break;
+            case 1:
+                break;
+        }
+        con.InitializeGame(a);
+    }
+    public void OnSubmit()
+    {
+        IsOn();
+    }
+    public void IsOn()
+    {
+        bool[] playersaktiv = new bool[3];
+        if (toggle1.isOn)
+        {
+            playersaktiv[0] = true;                
+        }
+        if (toggle2.isOn)
+        {
+            playersaktiv[1] = true;
+        }
+        if (toggle3.isOn)
+        {
+            playersaktiv[2] = true;;
+        }
+        if (toggle4.isOn)
+        {
+            playersaktiv[3] = true;       
+        }
+        PlayerKIOut(playersaktiv);
     }
     public void DoSomething()
     {
         Debug.Log("HUSO");
-        menu1.SetActive(false);
         foreach (Player player in con.players)
         {
             if (player.isActive == true)
@@ -47,7 +102,7 @@ public class MainMenu : MonoBehaviour
     }
     public void StoreName()
     {
-        PlayerPrefs.SetString("username",playername.text);
+        PlayerPrefs.SetString("username",playername1.text);
     }
     void Asd(int b)
     {
