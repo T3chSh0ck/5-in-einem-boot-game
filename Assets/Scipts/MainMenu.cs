@@ -6,18 +6,20 @@ using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
     public TMP_InputField playername1, playername2, playername3, playername4;
+    public TMP_Text activePlayerInfo, winnerDisplay;
     public GameController con;
     public Toggle rule;
     public Toggle[] toggles;
     public TMP_Dropdown[] dropdowns;
     public Button submit;
-    public GameObject playground, nature, menu, rulewindow, rules, ruleee, errortextfield;
+    public GameObject playground, nature, menu, rulewindow, victoryWindow, rules, ruleee, errortextfield;
     void Start()
     {
         {
             playground.SetActive(false);
             nature.SetActive(false);
             rulewindow.SetActive(false);
+            victoryWindow.SetActive(false);
             menu.SetActive(true);
             errortextfield.SetActive(false);
         }
@@ -41,7 +43,7 @@ public class MainMenu : MonoBehaviour
                 break;
             case 1:
                 StoreName(1, playername2.text);
-                con.players[2].isAi = true;
+                con.players[1].isAi = true;
                 break;
         }
         switch (dropdowns[2].value)
@@ -51,7 +53,7 @@ public class MainMenu : MonoBehaviour
                 break;
             case 1:
                 StoreName(2, playername3.text);
-                con.players[3].isAi = true;
+                con.players[2].isAi = true;
                 break;
         }
         switch (dropdowns[3].value)
@@ -79,25 +81,21 @@ public class MainMenu : MonoBehaviour
     }
     public void OnSubmit()
     {
-        int togglerson = 0;
-        foreach (Toggle t in toggles)
+        int dropdownplayer = 0;
+        int activePlayers = 0;
+        for (int i = 0; i < toggles.Length; i++)
         {
-            if (t.isOn)
-            {
-                togglerson++;
+            if(toggles[i].isOn){
+                activePlayers++;
+                if(dropdowns[i].value == 0){
+                    dropdownplayer++;
+                }
             }
+            
         }
-        int dropdownbot = 0;
-        foreach (TMP_Dropdown d in dropdowns)
+        if (activePlayers > 1)
         {
-            if (d.value == 1)
-            {
-                dropdownbot++;
-            }
-        }
-        if (togglerson >= 2)
-        {
-            if(dropdownbot <= 3)
+            if(dropdownplayer > 0)
             {
                 playground.SetActive(true);
                 nature.SetActive(true);
@@ -123,10 +121,10 @@ public class MainMenu : MonoBehaviour
         switch (error)
         {
             case 1:
-                errortextfield.GetComponent<TMP_Text>().text = "Bitte wählen Sie mehr als einen Spieler aus!";
+                errortextfield.GetComponent<TMP_Text>().text = "Bitte waehlen Sie mehr als einen Spieler aus!";
                 break;
             case 2:
-                errortextfield.GetComponent<TMP_Text>().text = "Sie können das Spiel nicht nur mit Computergegnern starten!";
+                errortextfield.GetComponent<TMP_Text>().text = "Sie koennen das Spiel nicht nur mit Computergegnern starten!";
                 break;
         }
         yield return new WaitForSeconds(2f);
@@ -155,6 +153,21 @@ public class MainMenu : MonoBehaviour
     }
     public void StoreName(int playerNr, string name)
     {
-        con.players[playerNr].nickname = name;
+        if(name != null && name != ""){
+            con.players[playerNr].nickname = name;
+        }else{
+            con.players[playerNr].nickname = (playerNr + 1) +"";
+        }
+        
+    }
+    public void SetPlayerActiveText(string name, Color col){
+        activePlayerInfo.text = "Spieler " + name + " ist am Zug";
+        activePlayerInfo.color = col;
+    }
+    public void AndTheWinnerIs(string name, Color col){
+        winnerDisplay.text = "Spieler " + name + " hat gewonnen!";
+        winnerDisplay.color = col;
+        rulewindow.SetActive(false);
+        victoryWindow.SetActive(true);
     }
 }

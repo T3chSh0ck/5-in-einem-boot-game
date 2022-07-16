@@ -3,6 +3,7 @@ using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -49,7 +50,7 @@ public class GameController : MonoBehaviour
     public int currentPlayer = 0;
     public Figure[] allFigures;
     public GameObject BoatPivot;
-    private float rotationTime = 7.0f;
+    private float rotationTime = 3.0f;
     private float rotationEnd = 0;
     private float timer;
     private bool rotating;
@@ -57,10 +58,12 @@ public class GameController : MonoBehaviour
 
     public bool moreJumpsPossibleThisTurn = false;
     private PlayTile lastJumpTarget;
-    bool firstMoveMade = false;
     bool AIMoveMade = false;
+
+    public MainMenu menu;
     void Start()
     {
+
         trans = gameObject.transform;
         playTiles = GetComponentsInChildren<PlayTile>();
         figureOffsetOnBoat = new Vector3[]{
@@ -101,9 +104,14 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            Debug.Log("Player " + winner + " wins!");
+            menu.AndTheWinnerIs(players[winner-1].nickname, players[winner-1].color);
         }
     }
+
+    public void RestartGame(){
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
     public void NextPlayer(){
         if(currentPlayer < 3){
             currentPlayer++;
@@ -116,6 +124,7 @@ public class GameController : MonoBehaviour
         if(players[currentPlayer].isAi){
             AIMoveMade = false;
         }
+        menu.SetPlayerActiveText(players[currentPlayer].nickname, players[currentPlayer].color);
     }
 
     void RotateBoats()
@@ -271,6 +280,7 @@ public class GameController : MonoBehaviour
         }
     }
     public void InitializeGame(bool[] playersActive){
+        menu.SetPlayerActiveText(players[currentPlayer].nickname, players[currentPlayer].color);
         for (int i = 0; i < playersActive.Length; i++)
         {
             players[i].InitializePlayer(playersActive[i], playTiles);
