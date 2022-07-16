@@ -84,11 +84,11 @@ public class GameController : MonoBehaviour
             }
         }
     }
-    public void EndTrain()
+    public void EndTurn()
     {
         if (!players[currentPlayer].isActive)
         {
-            //NextPlayer();
+            NextPlayer();
         }
         if (winner == 0)
         {
