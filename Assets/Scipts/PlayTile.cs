@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +21,8 @@ public class PlayTile : MonoBehaviour
 
     public int figuresOnBoat;
     public int boatColor;
+
+    public Figure[] figuresOnBase;
 
     
     // Start is called before the first frame update
@@ -95,10 +98,6 @@ public class PlayTile : MonoBehaviour
         
     }
 
-    public bool IsMovePossible(Vector2 Target){
-        return true;
-    }
-
     public void MakeMove(PlayTile targetTile){
         if(Mathf.Abs(targetTile.position.x-position.x) <=1 && Mathf.Abs(targetTile.position.y-position.y) <= 1){
             currentFigure.MoveRegular(targetTile);
@@ -122,7 +121,25 @@ public class PlayTile : MonoBehaviour
             targetTile.currentFigure = currentFigure;
         }
         ResetState();
-        currentFigure = null;	
+        if(isBase){
+            if(figuresOnBase.Length > 0){
+                Array.Resize(ref figuresOnBase, figuresOnBase.Length - 1);
+                if(figuresOnBase.Length == 0){
+                    currentFigure = null;
+                }else{
+                    currentFigure = figuresOnBase[figuresOnBase.Length-1];
+                }
+            }
+        }else{
+            currentFigure = null;	
+        }
+        
+    }
+
+    public void AddFigureToBase(Figure fig){
+        Array.Resize(ref figuresOnBase, figuresOnBase.Length + 1);
+        figuresOnBase[figuresOnBase.Length-1] = fig;
+        currentFigure = fig;
     }
 
     private Vector2 convertCoordinatesToBoard(int x, int y)

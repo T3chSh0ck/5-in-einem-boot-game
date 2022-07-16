@@ -28,7 +28,12 @@ public class Figure : MonoBehaviour
     {
         RaycastHit hit;
         if(Physics.Raycast(transform.position, -Vector3.up, out hit)) {
-            hit.transform.gameObject.GetComponent<PlayTile>().currentFigure = this;
+            PlayTile startTile = hit.transform.gameObject.GetComponent<PlayTile>();
+            if(startTile.isBase){
+                startTile.AddFigureToBase(this);
+            }else{
+                startTile.currentFigure = this;
+            }
         }
         offsetOnBoat = new Vector3[]{
             new Vector3(-0.00139999995f,-0.0174499992f,0.0104f),
