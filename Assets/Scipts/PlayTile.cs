@@ -100,13 +100,16 @@ public class PlayTile : MonoBehaviour
     public void MakeMove(PlayTile targetTile){
         if(Mathf.Abs(targetTile.position.x-position.x) <=1 && Mathf.Abs(targetTile.position.y-position.y) <= 1){
             currentFigure.MoveRegular(targetTile);
+            controller.moreJumpsPossibleThisTurn = false;
         }else{
             if(targetTile.isBoat){
                 currentFigure.boatSeat = targetTile.figuresOnBoat;
                 targetTile.figuresOnBoat++;
                 currentFigure.MoveJump(targetTile);
+                controller.moreJumpsPossibleThisTurn = false;
             }else{
                 currentFigure.MoveJump(targetTile);
+                controller.moreJumpsPossibleThisTurn = true;
             }
             
         }
