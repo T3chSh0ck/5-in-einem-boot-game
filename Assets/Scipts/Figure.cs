@@ -35,6 +35,7 @@ public class Figure : MonoBehaviour
                 startTile.currentFigure = this;
             }
         }
+        //Debug.Log("Finished Raycast");
         offsetOnBoat = new Vector3[]{
             new Vector3(-0.00139999995f,-0.0174499992f,0.0104f),
             new Vector3(0.00810000021f,-0.0105299996f,0.0104f),

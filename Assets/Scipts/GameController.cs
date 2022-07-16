@@ -15,7 +15,6 @@ public class GameController : MonoBehaviour
      * 3: player 3
      * 4: player 4
      */
-
     private int[] HomeFigures = new int[4] { 5, 5, 5, 5 };
     public int[] BoatFigures = new int[4] { 0, 0, 0, 0 };
     // BoatPositions: {N, E, S, W}
@@ -45,7 +44,7 @@ public class GameController : MonoBehaviour
     public PlayTile originTile;
 
     public Player[] players;
-
+    public AI[] ai_controllers;
     public int winner = 0;
 
     public int currentPlayer = 0;
@@ -59,6 +58,7 @@ public class GameController : MonoBehaviour
 
     public bool moreJumpsPossibleThisTurn = false;
     private PlayTile lastJumpTarget;
+    bool firstMoveMade = false;
     void Start()
     {
         trans = gameObject.transform;
@@ -78,6 +78,9 @@ public class GameController : MonoBehaviour
         if (!players[currentPlayer].isActive)
         {
             NextPlayer();
+        }
+        if(!firstMoveMade && players[currentPlayer].isAi){
+            ai_controllers[currentPlayer].DecideMove();
         }
         if (rotating){
             Debug.Log("Spin?");
@@ -111,6 +114,10 @@ public class GameController : MonoBehaviour
         originTile = null;
         lastJumpTarget = null;
         moreJumpsPossibleThisTurn = false;
+        if(players[currentPlayer].isAi){
+            System.Threading.Thread.Sleep(2000);
+            ai_controllers[currentPlayer].DecideMove();
+        }
     }
 
     void RotateBoats()
@@ -169,34 +176,36 @@ public class GameController : MonoBehaviour
         }
         originTile.MakeMove(targetTile);
         originTile = null;
+
+        Debug.Log(playing_field_states);
     }
 
-    private bool CheckMoveValid(PlayTile targetTile){
+    public bool CheckMoveValid(PlayTile startTile, PlayTile targetTile){
         if(targetTile.isBoat){
             if(targetTile.boatColor != currentPlayer){
                 return false;
             }
         }
         if(!targetTile.isBase){
-            if(!originTile.isBoat){
+            if(!startTile.isBoat){
                 if(targetTile.currentFigure == null){
-                    if(originTile.Neighbors.Contains(targetTile)){
+                    if(startTile.Neighbors.Contains(targetTile)){
                         if(!moreJumpsPossibleThisTurn){
                             return true;
                         }
                     }else if(moreJumpsPossibleThisTurn){
-                        if(originTile == lastJumpTarget){
-                            if(CheckForJump(originTile, targetTile)){
+                        if(startTile == lastJumpTarget){
+                            if(CheckForJump(startTile, targetTile)){
                                 return true;
                             }
                         }
-                    }else if(CheckForJump(originTile, targetTile)){
+                    }else if(CheckForJump(startTile, targetTile)){
                         return true;
                     }
                 }
             }
         }else 
-        if(CheckForJump(originTile, targetTile)){
+        if(CheckForJump(startTile, targetTile)){
             return true;
         }
         return false;
@@ -244,7 +253,7 @@ public class GameController : MonoBehaviour
             }
             
         }else{
-            if(CheckMoveValid(tile)){
+            if(CheckMoveValid(originTile, tile)){
                 if(CheckForJump(originTile, tile)){
                     lastJumpTarget = tile;
                     MakeMove(tile);
@@ -260,14 +269,14 @@ public class GameController : MonoBehaviour
         }
     }
     public void InitializeGame(bool[] playersActive){
-        int j = playersActive.Length;
         for (int i = 0; i < playersActive.Length; i++)
         {
             players[i].InitializePlayer(playersActive[i]);
-        }
+            if(players[i].isAi && players[i].isActive){
 
-        for (int i = 0; i < playersActive.Length; i++)
-        {
+                ai_controllers[i].InitializeAI(i, playTiles);
+            }
+
             if(!playersActive[i])
             {
                 for(int y = 0; y < 16; y++)
@@ -288,5 +297,9 @@ public class GameController : MonoBehaviour
     {
         Array.Resize(ref allFigures, allFigures.Length + 1);
         allFigures[allFigures.Length-1] = fig;
+    }
+
+    public int getBoatPosition(int p){
+        return BoatPositions[p];
     }
 }

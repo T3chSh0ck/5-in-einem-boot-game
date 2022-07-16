@@ -12,6 +12,7 @@ public class Player : MonoBehaviour
     public GameController con;
     public bool isAi;
     public string nickname = "Player";
+    public bool doneSpawning = false;
     // Start is called before the first frame update
     void Start()
     {
