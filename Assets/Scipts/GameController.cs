@@ -76,7 +76,11 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        if(rotating){
+        if (!players[currentPlayer].isActive)
+        {
+            NextPlayer();
+        }
+        if (rotating){
             Debug.Log("Spin?");
             timer += Time.deltaTime;
             if(timer <= rotationEnd){
@@ -89,10 +93,7 @@ public class GameController : MonoBehaviour
     }
     public void EndTurn()
     {
-        if (!players[currentPlayer].isActive)
-        {
-            NextPlayer();
-        }
+
         if (winner == 0)
         {
             if (moveMade)
