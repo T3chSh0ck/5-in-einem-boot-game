@@ -185,7 +185,15 @@ public class GameController : MonoBehaviour
             if(!originTile.isBoat){
                 if(targetTile.currentFigure == null){
                     if(originTile.Neighbors.Contains(targetTile)){
-                        return true;
+                        if(!moreJumpsPossibleThisTurn){
+                            return true;
+                        }
+                    }else if(moreJumpsPossibleThisTurn){
+                        if(originTile == lastJumpTarget){
+                            if(CheckForJump(originTile, targetTile)){
+                                return true;
+                            }
+                        }
                     }else if(CheckForJump(originTile, targetTile)){
                         return true;
                     }
@@ -241,11 +249,15 @@ public class GameController : MonoBehaviour
             
         }else{
             if(CheckMoveValid(tile)){
-                if(CheckJumpValid(tile)){
+                if(CheckForJump(originTile, tile)){
                     lastJumpTarget = tile;
+                    MakeMove(tile);
+                }else{
+                    MakeMove(tile);
+                    originTile = null;
+                    EndTurn();
                 }
-                MakeMove(tile);
-                originTile = null;
+                
             }else{
                 originTile = tile;
             }
