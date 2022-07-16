@@ -73,13 +73,12 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
+        if(!players[currentPlayer].isActive){
+            NextPlayer();
+        }
         if(winner == 0){
             if(moveMade){
-                if(currentPlayer < 3){
-                    currentPlayer++;
-                }else{
-                    currentPlayer = 0;
-                }
+                NextPlayer();
                 moveMade = false;
             }
         }else{
@@ -98,10 +97,12 @@ public class GameController : MonoBehaviour
         }
     }
 
-    int[] convertBoardToCoordinates(int x, int y)
-    {
-        int[] realCoords = new int[2] { origin[0] + x * 22, origin[1] + y * 22 };
-        return realCoords;
+    void NextPlayer(){
+        if(currentPlayer < 3){
+            currentPlayer++;
+        }else{
+            currentPlayer = 0;
+        }
     }
 
     void RotateBoats()
@@ -219,6 +220,7 @@ public class GameController : MonoBehaviour
             }
            
         }else{
+            //Debug.Log("Move Valid");
             if(CheckMoveValid(tile)){
                 MakeMove(tile);
                 originTile = null;

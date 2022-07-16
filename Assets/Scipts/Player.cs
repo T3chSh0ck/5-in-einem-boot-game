@@ -10,6 +10,8 @@ public class Player : MonoBehaviour
     public SpawnPoint[] spawnpoints;
     public bool isActive;
     public GameController con;
+    public bool isAi;
+    public string nickname = "Player";
     // Start is called before the first frame update
     void Start()
     {

@@ -63,7 +63,16 @@ public class PlayTile : MonoBehaviour
     }
 
     void OnMouseDown(){
+        if(controller.players[controller.currentPlayer].isAi){
+            return;
+        }
         if(!selected){
+            if(currentFigure != null){
+                if(currentFigure.playerNr != controller.currentPlayer){
+                return;
+                }
+            }
+            
             controller.ResetFieldStates();
             if(!isBase && !isBoat && currentFigure != null){
                 rend.material = SelectedMaterial;

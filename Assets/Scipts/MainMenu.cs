@@ -31,33 +31,41 @@ public class MainMenu : MonoBehaviour
         switch (dropdown1.value)
         {
             case 0:
-                StoreName();
+                StoreName(0, playername1.text);
                 break;
             case 1:
+                StoreName(0, playername1.text);
+                con.players[0].isAi = true;
                 break;
         }
-        switch (dropdown1.value)
+        switch (dropdown2.value)
         {
             case 0:
-                StoreName();
+                StoreName(1, playername2.text);
                 break;
             case 1:
+                StoreName(1, playername2.text);
+                con.players[1].isAi = true;
                 break;
         }
-        switch (dropdown1.value)
+        switch (dropdown3.value)
         {
             case 0:
-                StoreName();
+                StoreName(2, playername3.text);
                 break;
             case 1:
+                StoreName(2, playername3.text);
+                con.players[2].isAi = true;
                 break;
         }
-        switch (dropdown1.value)
+        switch (dropdown4.value)
         {
             case 0:
-                StoreName();
+                StoreName(3, playername4.text);
                 break;
             case 1:
+                StoreName(3, playername4.text);
+                con.players[3].isAi = true;
                 break;
         }
         con.InitializeGame(a);
@@ -103,9 +111,9 @@ public class MainMenu : MonoBehaviour
         }
         PlayerKIOut(playersaktiv);
     }
-    public void StoreName()
+    public void StoreName(int playerNr, string name)
     {
-        PlayerPrefs.SetString("username",playername1.text);
+        con.players[playerNr].nickname = name;
     }
 }
 
