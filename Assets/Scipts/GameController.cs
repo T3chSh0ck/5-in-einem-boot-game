@@ -49,7 +49,6 @@ public class GameController : MonoBehaviour
     public int winner = 0;
 
     public int currentPlayer = 0;
-    private bool moveMade = false;
     public Figure[] allFigures;
     public GameObject BoatPivot;
     private float rotationTime = 7.0f;
@@ -96,11 +95,7 @@ public class GameController : MonoBehaviour
 
         if (winner == 0)
         {
-            if (moveMade)
-            {
-                NextPlayer();
-                moveMade = false;
-            }
+            NextPlayer();
         }
         else
         {
@@ -114,6 +109,7 @@ public class GameController : MonoBehaviour
             currentPlayer = 0;
         }
         originTile = null;
+        lastJumpTarget = null;
         moreJumpsPossibleThisTurn = false;
     }
 
@@ -173,7 +169,6 @@ public class GameController : MonoBehaviour
         }
         originTile.MakeMove(targetTile);
         originTile = null;
-        moveMade = true;
     }
 
     private bool CheckMoveValid(PlayTile targetTile){
