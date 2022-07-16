@@ -57,6 +57,9 @@ public class GameController : MonoBehaviour
     private float timer;
     private bool rotating;
     private Vector3 nextRotation;
+
+    public bool moreJumpsPossibleThisTurn = false;
+    private PlayTile lastJumpTarget;
     void Start()
     {
         trans = gameObject.transform;
@@ -109,6 +112,8 @@ public class GameController : MonoBehaviour
         }else{
             currentPlayer = 0;
         }
+        originTile = null;
+        moreJumpsPossibleThisTurn = false;
     }
 
     void RotateBoats()
@@ -219,15 +224,26 @@ public class GameController : MonoBehaviour
             originTile = null;
             return;
         } 
-
         if(originTile == null){
             if(tile.currentFigure != null){
-                originTile = tile;
+                if(lastJumpTarget != null){
+                    if(tile == lastJumpTarget){
+                        originTile = tile;
+                    }
+                    else{
+                        originTile = null;
+                    }
+                }else{
+                    originTile = tile;
+                }
+                
             }
-           
+            
         }else{
-            //Debug.Log("Move Valid");
             if(CheckMoveValid(tile)){
+                if(CheckJumpValid(tile)){
+                    lastJumpTarget = tile;
+                }
                 MakeMove(tile);
                 originTile = null;
             }else{
