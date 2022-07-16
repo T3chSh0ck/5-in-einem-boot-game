@@ -20,10 +20,11 @@ public class SpawnPoint : MonoBehaviour
     {
         
     }        
-    public void Spawn(){
+    public Figure Spawn(){
         GameObject instanz = Instantiate(Figure, gameObject.transform.position + offset, Quaternion.identity);
         instanz.GetComponent<Renderer>().material.color = player.color;
         instanz.GetComponent<Figure>().playerNr = player.playerNumber;
+        return instanz.GetComponent<Figure>();
         //foreach(SpawnPoint p in player1)
         //GameObject instanz = Instantiate(Figure, gameObject.transform.position, Quaternion.identity); 
         //instanz.GetComponent<Renderer>ssssssssssssssssssssssssss().material.color = player.color; 

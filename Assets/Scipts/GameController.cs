@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour
     private int[] HomeFigures = new int[4] { 5, 5, 5, 5 };
     public int[] BoatFigures = new int[4] { 0, 0, 0, 0 };
     // BoatPositions: {N, E, S, W}
-    private int[] BoatPositions = new int[4] { 1, 2, 3, 4 };
+    private int[] BoatPositions = new int[4] { 0, 1, 2, 3 };
 
     private int?[,] playing_field_states = new int?[16, 16]{ {null,null,null,null,null,null,   0,   0,   0,   0,null,null,null,null,null,null},
                                                              {null,null,null,null,null,null,null,   0,   0,null,null,null,null,null,null,null},
@@ -44,7 +44,6 @@ public class GameController : MonoBehaviour
     public PlayTile originTile;
 
     public Player[] players;
-    public AI[] ai_controllers;
     public int winner = 0;
 
     public int currentPlayer = 0;
@@ -59,6 +58,7 @@ public class GameController : MonoBehaviour
     public bool moreJumpsPossibleThisTurn = false;
     private PlayTile lastJumpTarget;
     bool firstMoveMade = false;
+    bool AIMoveMade = false;
     void Start()
     {
         trans = gameObject.transform;
@@ -79,11 +79,11 @@ public class GameController : MonoBehaviour
         {
             NextPlayer();
         }
-        if(!firstMoveMade && players[currentPlayer].isAi){
-            ai_controllers[currentPlayer].DecideMove();
+        if(players[currentPlayer].isAi && !AIMoveMade){
+            AIMoveMade = true;
+            players[currentPlayer].AIController.DecideMove();
         }
         if (rotating){
-            Debug.Log("Spin?");
             timer += Time.deltaTime;
             if(timer <= rotationEnd){
                 BoatPivot.transform.eulerAngles = new Vector3(0, BoatPivot.transform.eulerAngles.y + (90/rotationTime) * Time.deltaTime,0);
@@ -95,7 +95,6 @@ public class GameController : MonoBehaviour
     }
     public void EndTurn()
     {
-
         if (winner == 0)
         {
             NextPlayer();
@@ -115,8 +114,7 @@ public class GameController : MonoBehaviour
         lastJumpTarget = null;
         moreJumpsPossibleThisTurn = false;
         if(players[currentPlayer].isAi){
-            System.Threading.Thread.Sleep(2000);
-            ai_controllers[currentPlayer].DecideMove();
+            AIMoveMade = false;
         }
     }
 
@@ -176,8 +174,6 @@ public class GameController : MonoBehaviour
         }
         originTile.MakeMove(targetTile);
         originTile = null;
-
-        Debug.Log(playing_field_states);
     }
 
     public bool CheckMoveValid(PlayTile startTile, PlayTile targetTile){
@@ -216,16 +212,22 @@ public class GameController : MonoBehaviour
         {
             if(startTile.Neighbors[i] != null)
             {
-                if(startTile.Neighbors[i].Neighbors[i] != null)
+                if(!startTile.Neighbors[i].isBoat)
                 {
-                    if(startTile.Neighbors[i].currentFigure != null)
+                    if(startTile.Neighbors[i].Neighbors[i] != null)
                     {
-                        if(startTile.Neighbors[i].Neighbors[i] == targetTile)
+                        if(startTile.Neighbors[i].currentFigure != null)
                         {
-                            return true;
+                            if(startTile.Neighbors[i].Neighbors[i] == targetTile)
+                            {
+                                if(targetTile.currentFigure == null){
+                                    return true;
+                                }
+                            }
                         }
                     }
                 }
+                
             }
                     
         }
@@ -271,11 +273,7 @@ public class GameController : MonoBehaviour
     public void InitializeGame(bool[] playersActive){
         for (int i = 0; i < playersActive.Length; i++)
         {
-            players[i].InitializePlayer(playersActive[i]);
-            if(players[i].isAi && players[i].isActive){
-
-                ai_controllers[i].InitializeAI(i, playTiles);
-            }
+            players[i].InitializePlayer(playersActive[i], playTiles);
 
             if(!playersActive[i])
             {

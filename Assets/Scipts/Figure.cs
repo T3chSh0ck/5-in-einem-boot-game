@@ -26,6 +26,17 @@ public class Figure : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        
+        offsetOnBoat = new Vector3[]{
+            new Vector3(-0.00139999995f,-0.0174499992f,0.0104f),
+            new Vector3(0.00810000021f,-0.0105299996f,0.0104f),
+            new Vector3(-0.0114000002f,-0.00488999998f,0.0104f),
+            new Vector3(0.00989999995f,0.00987999979f,0.0104f),
+            new Vector3(-0.00789999962f,0.0161899999f,0.0104f)
+        };
+    }
+
+    public void InitializePosition(){
         RaycastHit hit;
         if(Physics.Raycast(transform.position, -Vector3.up, out hit)) {
             PlayTile startTile = hit.transform.gameObject.GetComponent<PlayTile>();
@@ -35,14 +46,6 @@ public class Figure : MonoBehaviour
                 startTile.currentFigure = this;
             }
         }
-        //Debug.Log("Finished Raycast");
-        offsetOnBoat = new Vector3[]{
-            new Vector3(-0.00139999995f,-0.0174499992f,0.0104f),
-            new Vector3(0.00810000021f,-0.0105299996f,0.0104f),
-            new Vector3(-0.0114000002f,-0.00488999998f,0.0104f),
-            new Vector3(0.00989999995f,0.00987999979f,0.0104f),
-            new Vector3(-0.00789999962f,0.0161899999f,0.0104f)
-        };
     }
 
     // Update is called once per frame

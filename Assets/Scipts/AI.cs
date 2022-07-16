@@ -14,7 +14,7 @@ public class AI : MonoBehaviour
 {
     public GameController controller; 
     // Start is called before the first frame update
-    private PlayTile[] AIFigurePositions;
+    public PlayTile[] AIFigurePositions;
     private int playerNumber;
     private int boatDirection;
     private System.Random decider = new System.Random();
@@ -33,7 +33,6 @@ public class AI : MonoBehaviour
         playerNumber = num;
         int AIFigureIndex = 0;
             for(int idx = 0; idx < gameBoard.Length; idx++){
-                //Debug.Log("Checking for AI Figures");
                 if(gameBoard[idx].currentFigure != null){
                     if(playerNumber == gameBoard[idx].currentFigure.playerNr){
                         if(gameBoard[idx].isBase){
@@ -45,7 +44,7 @@ public class AI : MonoBehaviour
                         }
                     }
                 }
-            }           
+            }          
         CheckBoatDirection();
     }
 
@@ -71,10 +70,10 @@ public class AI : MonoBehaviour
             int attemptsMade = 0;
             while(attemptsMade <= 7){
                 PlayTile figureToMove = AIFigurePositions[figureToMoveIdx];
-                if(JumpTowardsBoat(figureToMove)){
+                if(JumpTowardsBoat(figureToMove, figureToMoveIdx)){
                     controller.EndTurn();
                     return;
-                }else if(MoveTowardsBoat(figureToMove)){
+                }else if(MoveTowardsBoat(figureToMove, figureToMoveIdx)){
                     controller.EndTurn();
                     return;
                 }else{
@@ -91,52 +90,83 @@ public class AI : MonoBehaviour
 
     }
 
-    bool MoveTowardsBoat(PlayTile tile){
-        if(controller.CheckMoveValid(tile, tile.Neighbors[boatDirection])){
-            MoveFromTo(tile, tile.Neighbors[boatDirection]);
-            return true;
-        }else if(controller.CheckMoveValid(tile, tile.Neighbors[boatDirection + 1])){                       //Walk towards boat
-            MoveFromTo(tile, tile.Neighbors[boatDirection + 1]);
-            return true;
-        }else if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection - 1) & 0b_0000_0111])){
-            MoveFromTo(tile, tile.Neighbors[(boatDirection - 1) & 0b_0000_0111]);
-            return true;
-        }else if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection + 2)  & 0b_0000_0111])){     //Walk Left or Right
-            MoveFromTo(tile, tile.Neighbors[(boatDirection + 2)  & 0b_0000_0111]);
-            return true;
+    bool MoveTowardsBoat(PlayTile tile, int FigureIdx){
+        if(tile.Neighbors[boatDirection] != null){
+            if(controller.CheckMoveValid(tile, tile.Neighbors[boatDirection])){
+                MoveFromTo(tile, tile.Neighbors[boatDirection], FigureIdx);
+                return true;
+            }
+        }else if(tile.Neighbors[boatDirection + 1] != null){                                    //Walk towards boat
+            if(controller.CheckMoveValid(tile, tile.Neighbors[boatDirection + 1])){
+                MoveFromTo(tile, tile.Neighbors[boatDirection + 1], FigureIdx);
+                return true;
+            }
+        }else if(tile.Neighbors[(boatDirection - 1) & 7] != null){
+            if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection - 1) & 7])){
+                MoveFromTo(tile, tile.Neighbors[(boatDirection - 1) & 7], FigureIdx);
+                return true;
+            }
+        }else if(tile.Neighbors[(boatDirection + 2)  & 7] != null){                             //Walk Left or Right
+            Debug.Log((boatDirection + 2)  & 7);
+            if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection + 2)  & 7])){
+                MoveFromTo(tile, tile.Neighbors[(boatDirection + 2)  & 7], FigureIdx);
+                return true;
+            }
         }
-        else if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection - 2)  & 0b_0000_0111])){
-            MoveFromTo(tile, tile.Neighbors[(boatDirection - 2)  & 0b_0000_0111]);
-            return true;
-        }else if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection - 4)  & 0b_0000_0111])){     //Walk backwards
-            MoveFromTo(tile, tile.Neighbors[(boatDirection - 4)  & 0b_0000_0111]);
-            return true;
-        }else if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection - 3)  & 0b_0000_0111])){
-            MoveFromTo(tile, tile.Neighbors[(boatDirection - 3)  & 0b_0000_0111]);
-            return true;
-        }else if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection - 5)  & 0b_0000_0111])){
-            MoveFromTo(tile, tile.Neighbors[(boatDirection - 5)  & 0b_0000_0111]);
-            return true;
-        }else{
-            return false;
+        else if(tile.Neighbors[(boatDirection - 2)  & 7] != null){
+            if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection - 2)  & 7])){
+                MoveFromTo(tile, tile.Neighbors[(boatDirection - 2)  & 7], FigureIdx);
+                return true;
+            }
+        }else if(tile.Neighbors[(boatDirection - 4)  & 7] != null){                              //Walk backwards
+            if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection - 4)  & 7])){
+                MoveFromTo(tile, tile.Neighbors[(boatDirection - 4)  & 7], FigureIdx);
+                return true;
+            }
+        }else if(tile.Neighbors[(boatDirection - 3)  & 7] != null){
+            if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection - 3)  & 7])){
+                MoveFromTo(tile, tile.Neighbors[(boatDirection - 3)  & 7], FigureIdx);
+                return true;
+            }
+        }else if(tile.Neighbors[(boatDirection - 5)  & 7] != null){
+            if(controller.CheckMoveValid(tile, tile.Neighbors[(boatDirection - 5)  & 7])){
+                MoveFromTo(tile, tile.Neighbors[(boatDirection - 5)  & 7], FigureIdx);
+                return true;
+            }
         }
+        return false;
     } 
 
     void RemoveFigureFromList(int idx){
         AIFigurePositions[idx] = AIFigurePositions[AIFigurePositions.Length-1];
         Array.Resize(ref AIFigurePositions, AIFigurePositions.Length-1);
     }
-
-    bool JumpTowardsBoat(PlayTile tile){
-        if(controller.CheckForJump(tile, tile.Neighbors[boatDirection].Neighbors[boatDirection])){
-            MoveFromTo(tile, tile.Neighbors[boatDirection].Neighbors[boatDirection]);
-            return true;
-        }else if(controller.CheckForJump(tile, tile.Neighbors[boatDirection + 1].Neighbors[boatDirection + 1])){
-            MoveFromTo(tile, tile.Neighbors[boatDirection + 1].Neighbors[boatDirection + 1]);
-            return true;
-        }else if(controller.CheckForJump(tile, tile.Neighbors[(boatDirection - 1) & 0b_0000_0111].Neighbors[(boatDirection - 1) & 0b_0000_0111])){
-            MoveFromTo(tile, tile.Neighbors[(boatDirection - 1) & 0b_0000_0111].Neighbors[(boatDirection - 1) & 0b_0000_0111]);
-            return true;
+    
+    bool JumpTowardsBoat(PlayTile tile, int FigureIdx){
+        
+        if(tile.Neighbors[boatDirection] != null){
+            if(tile.Neighbors[boatDirection].Neighbors[boatDirection] != null){
+                if(controller.CheckForJump(tile, tile.Neighbors[boatDirection].Neighbors[boatDirection])){
+                    MoveFromTo(tile, tile.Neighbors[boatDirection].Neighbors[boatDirection], FigureIdx);
+                    return true;
+                }
+            }
+            
+        }else if(tile.Neighbors[boatDirection + 1] != null){
+            if(tile.Neighbors[boatDirection + 1].Neighbors[boatDirection + 1] != null){
+                if(controller.CheckForJump(tile, tile.Neighbors[boatDirection + 1].Neighbors[boatDirection + 1])){
+                    MoveFromTo(tile, tile.Neighbors[boatDirection + 1].Neighbors[boatDirection + 1], FigureIdx);
+                    return true;
+                }
+            }
+            
+        }else if(tile.Neighbors[(boatDirection - 1) & 7] != null){
+            if(tile.Neighbors[(boatDirection - 1) & 7].Neighbors[(boatDirection - 1) & 7] != null){
+                if(controller.CheckForJump(tile, tile.Neighbors[(boatDirection - 1) & 7].Neighbors[(boatDirection - 1) & 7])){
+                    MoveFromTo(tile, tile.Neighbors[(boatDirection - 1) & 7].Neighbors[(boatDirection - 1) & 7], FigureIdx);
+                    return true;
+                }
+            }  
         }
         return false;
     }
@@ -175,10 +205,13 @@ public class AI : MonoBehaviour
                         return result;
                     }else if(AIFigurePositions[i].Neighbors[j].Neighbors[j] != null){
                         if(AIFigurePositions[i].Neighbors[j].Neighbors[j].isBoat && AIFigurePositions[i].Neighbors[j].Neighbors[j].boatColor == playerNumber){
-                            result.canWin = true;
-                            result.fieldIndex = i;
-                            result.Boat = AIFigurePositions[i].Neighbors[j].Neighbors[j];
-                            return result;
+                            if(AIFigurePositions[i].Neighbors[j].currentFigure != null){
+                                result.canWin = true;
+                                result.fieldIndex = i;
+                                result.Boat = AIFigurePositions[i].Neighbors[j].Neighbors[j];
+                                return result;
+                            }
+                            
                         }
                     }
                 }
@@ -188,6 +221,14 @@ public class AI : MonoBehaviour
     }
 
     void MoveFromTo(PlayTile fromTile, PlayTile toTile){
+        Debug.Log("AI Player "+ playerNumber + " moving from " + fromTile + " to  Boat");
+        controller.SelectTile(fromTile);
+        controller.SelectTile(toTile);
+    }
+
+    void MoveFromTo(PlayTile fromTile, PlayTile toTile, int FigureIdx){
+        Debug.Log("AI Player "+ playerNumber + " moving from " + fromTile + " to " + toTile + ", at Idx: " + FigureIdx);
+        AIFigurePositions[FigureIdx] = toTile;
         controller.SelectTile(fromTile);
         controller.SelectTile(toTile);
     }

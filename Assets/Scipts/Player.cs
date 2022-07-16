@@ -11,6 +11,7 @@ public class Player : MonoBehaviour
     public bool isActive;
     public GameController con;
     public bool isAi;
+    public AI AIController;
     public string nickname = "Player";
     public bool doneSpawning = false;
     // Start is called before the first frame update
@@ -23,21 +24,27 @@ public class Player : MonoBehaviour
     {
     }
 
-    public void SpawnFigures(){
+    public void SpawnFigures(PlayTile[] gameBoard){
         {
             if (isActive == true)
             {
                 foreach (SpawnPoint sp in spawnpoints)
                 {
-                    sp.Spawn();
+                    sp.Spawn().InitializePosition();
+                }
+                if(isAi){
+                    
+                    
+                    AIController.InitializeAI(playerNumber, gameBoard);
                 }
             }
         }
         
     }
 
-    public void InitializePlayer(bool playersaktiv){
+    public void InitializePlayer(bool playersaktiv, PlayTile[] gameBoard){
         isActive = playersaktiv;
-        SpawnFigures();
+        SpawnFigures(gameBoard);
+        
     }
 }
