@@ -73,18 +73,6 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        if(!players[currentPlayer].isActive){
-            NextPlayer();
-        }
-        if(winner == 0){
-            if(moveMade){
-                NextPlayer();
-                moveMade = false;
-            }
-        }else{
-            Debug.Log("Player " + winner + " wins!");
-        }
-
         if(rotating){
             Debug.Log("Spin?");
             timer += Time.deltaTime;
@@ -96,8 +84,26 @@ public class GameController : MonoBehaviour
             }
         }
     }
-
-    void NextPlayer(){
+    public void EndTrain()
+    {
+        if (!players[currentPlayer].isActive)
+        {
+            //NextPlayer();
+        }
+        if (winner == 0)
+        {
+            if (moveMade)
+            {
+                NextPlayer();
+                moveMade = false;
+            }
+        }
+        else
+        {
+            Debug.Log("Player " + winner + " wins!");
+        }
+    }
+    public void NextPlayer(){
         if(currentPlayer < 3){
             currentPlayer++;
         }else{
