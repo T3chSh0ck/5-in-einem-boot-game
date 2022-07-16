@@ -151,7 +151,7 @@ public class GameController : MonoBehaviour
             playing_field_states[(int)targetTile.position.x,(int)targetTile.position.y] = currentPlayer;
             playing_field_states[(int)originTile.position.x,(int)originTile.position.y] = 0;
         }else if(originTile.isBase){
-            //TODO
+            HomeFigures[currentPlayer] -= 1;
         }else if(targetTile.isBoat){
             BoatFigures[currentPlayer] += 1;
             if(BoatFigures[currentPlayer] >= 5){
@@ -175,28 +175,28 @@ public class GameController : MonoBehaviour
                 if(targetTile.currentFigure == null){
                     if(originTile.Neighbors.Contains(targetTile)){
                         return true;
-                    }else if(CheckForJump(targetTile)){
-                        return false;
+                    }else if(CheckForJump(originTile, targetTile)){
+                        return true;
                     }
                 }
             }
         }else 
-        if(CheckForJump(targetTile)){
+        if(CheckForJump(originTile, targetTile)){
             return true;
         }
         return false;
     }
 
-    private bool CheckForJump(PlayTile targetTile){
+    public bool CheckForJump(PlayTile startTile, PlayTile targetTile){
         for(int i = 0; i < 8; i++)
         {
-            if(originTile.Neighbors[i] != null)
+            if(startTile.Neighbors[i] != null)
             {
-                if(originTile.Neighbors[i].Neighbors[i] != null)
+                if(startTile.Neighbors[i].Neighbors[i] != null)
                 {
-                    if(originTile.Neighbors[i].Neighbors[i] == targetTile)
+                    if(startTile.Neighbors[i].currentFigure != null)
                     {
-                        if(originTile.Neighbors[i].currentFigure != null)
+                        if(startTile.Neighbors[i].Neighbors[i] == targetTile)
                         {
                             return true;
                         }

@@ -75,7 +75,6 @@ public class PlayTile : MonoBehaviour
                 return;
                 }
             }
-            
             controller.ResetFieldStates();
             if(!isBase && !isBoat && currentFigure != null){
                 rend.material = SelectedMaterial;
@@ -105,7 +104,7 @@ public class PlayTile : MonoBehaviour
             if(targetTile.isBoat){
                 currentFigure.boatSeat = targetTile.figuresOnBoat;
                 targetTile.figuresOnBoat++;
-                currentFigure.MoveRegular(targetTile);
+                currentFigure.MoveJump(targetTile);
             }else{
                 currentFigure.MoveJump(targetTile);
             }

@@ -70,13 +70,17 @@ public class Figure : MonoBehaviour
             if(movementFramesJump >= performedFrames)
             {
                 Vector3 JumpVector = new Vector3(0, Mathf.Sin((performedFrames/movementFramesJump) * Mathf.PI), 0);
-                transform.position = Vector3.Lerp(transform.position, newPosition, performedFrames/movementFramesJump) + JumpVector * 20;
+                transform.position = Vector3.Lerp(transform.position, newPosition, performedFrames/movementFramesJump) + JumpVector * 15;
                 performedFrames++;
                 if(performedFrames == movementFramesJump)
                 {
                     performedFrames = 0;
                     movingJump = false;
                     transform.position = newPosition;
+                    if(movedToBoat){
+                        transform.localPosition = offsetOnBoat[boatSeat];
+                        movedToBoat = false;
+                    }
                 }
                 
             }
