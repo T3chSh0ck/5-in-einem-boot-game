@@ -16,27 +16,11 @@ public class GameController : MonoBehaviour
      * 3: player 3
      * 4: player 4
      */
-    private int[] HomeFigures = new int[4] { 5, 5, 5, 5 };
     public int[] BoatFigures = new int[4] { 0, 0, 0, 0 };
     // BoatPositions: {N, E, S, W}
     private int[] BoatPositions = new int[4] { 0, 1, 2, 3 };
 
-    private int?[,] playing_field_states = new int?[16, 16]{ {null,null,null,null,null,null,   0,   0,   0,   0,null,null,null,null,null,null},
-                                                             {null,null,null,null,null,null,null,   0,   0,null,null,null,null,null,null,null},
-                                                             {null,null,   2,null,null,null,null,   0,   0,null,null,null,null,   3,null,null},
-                                                             {null,null,null,null,null,null,null,   0,   0,null,null,null,null,null,null,null},
-                                                             {null,null,null,null,   2,   0,   2,   0,   2,   0,   0,   3,null,null,null,null},
-                                                             {null,null,null,null,   0,   0,   0,   0,   0,   0,   0,   0,null,null,null,null},
-                                                             {   0,null,null,null,   0,   0,null,null,null,null,   0,   3,null,null,null,   0},
-                                                             {   0,   0,   0,   0,   1,   0,null,null,null,null,   0,   0,   0,   0,   0,   0},
-                                                             {   0,   0,   0,   0,   0,   0,null,null,null,null,   0,   3,   0,   0,   0,   0},
-                                                             {   0,null,null,null,   1,   0,null,null,null,null,   0,   0,null,null,null,   0},
-                                                             {null,null,null,null,   0,   0,   0,   0,   0,   0,   0,   0,null,null,null,null},
-                                                             {null,null,null,null,   1,   0,   0,   4,   0,   4,   0,   4,null,null,null,null},
-                                                             {null,null,null,null,null,null,null,   0,   0,null,null,null,null,null,null,null},
-                                                             {null,null,   1,null,null,null,null,   0,   0,null,null,null,null,   4,null,null},
-                                                             {null,null,null,null,null,null,null,   0,   0,null,null,null,null,null,null,null},
-                                                             {null,null,null,null,null,null,   0,   0,   0,   0,null,null,null,null,null,null}};
+
     private Vector3[] figureOffsetOnBoat;
     private Dictionary<Vector2,Figure>[] figureByPosition;
     private Transform trans;
@@ -66,9 +50,21 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        /*
+        Description:
+            Start is called on the first frame the object exists
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
+
+        //Initialize relevant attributes
         rand = new System.Random();
         trans = gameObject.transform;
         playTiles = GetComponentsInChildren<PlayTile>();
+
+        //Measured offset for boat seats
         figureOffsetOnBoat = new Vector3[]{
             new Vector3(-0.00139999995f,-0.0174499992f,0.0104f),
             new Vector3(0.00810000021f,-0.0105299996f,0.0104f),
@@ -81,17 +77,29 @@ public class GameController : MonoBehaviour
 
     void Update()
     {
-        if (!players[currentPlayer].isActive)
+        /*
+        Description:
+            Update is called every frame update
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
+
+        //Check if the currentPlayer is participating. If not, move on to the next player
+        if (!players[currentPlayer].isActive)  
         {
             NextPlayer();
         }
+
+        //Check if it is the turn of an AI
         if(players[currentPlayer].isAi && !AIMoveMade){
             Debug.Log("AI " + currentPlayer + "'s turn");
             AIMoveMade = true;
-            //players[currentPlayer].AIController.DecideMove();
             WaitBeforeDeciding();
-            
         }
+
+        //Animation controller for boat movement
         if (rotating){
             timer += Time.deltaTime;
             if(timer <= rotationEnd){
@@ -103,14 +111,34 @@ public class GameController : MonoBehaviour
         }
     }
 
+
     public void EndTurnIfNotAI(){
+        /*
+        Description:
+            Prevents the player from ending the AIs turn prematurely
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
+
         if(!players[currentPlayer].isAi){
             EndTurn();
         }
     }
 
+
     public void EndTurn()
     {
+        /*
+        Description:
+            Ends the current players turn and checks if they won
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
+
         if (winner == 0)
         {
             Debug.Log("Player " + currentPlayer + " done");
@@ -122,11 +150,31 @@ public class GameController : MonoBehaviour
         }
     }
 
+
     public void RestartGame(){
+        /*
+        Description:
+            Restart the game from the beginning
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
+
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
+
     public void NextPlayer(){
+        /*
+        Description:
+            Changes the active player to the next player and resets all relevant values
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
+
         if(currentPlayer < 3){
             currentPlayer++;
         }else{
@@ -139,10 +187,33 @@ public class GameController : MonoBehaviour
         menu.SetPlayerActiveText(players[currentPlayer].nickname, players[currentPlayer].color);
     }
     
+
     public void WaitBeforeDeciding(){
+        /*
+        Description:
+            Wait a random amount of time before calling DecideMove
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
+
         StartCoroutine(PauseGame(0.9f + (1 / (rand.Next(9)+1) )));
     }
+
+
     public IEnumerator PauseGame(float pauseTime){
+        /*
+        Description:
+            Pauses the game for a specified amount of seconds,
+            calls DecideMove once finished waiting
+
+        Parameters: 
+            float pauseTime: Time to pause the game for (in Seconds)
+
+        Returns: N/A
+        */
+
         Time.timeScale = 0f;
         float pauseEndTime = Time.realtimeSinceStartup + pauseTime;
         while (Time.realtimeSinceStartup < pauseEndTime)
@@ -157,6 +228,15 @@ public class GameController : MonoBehaviour
 
     void RotateBoats()
     {
+        /*
+        Description:
+            Move all Boats to next Port
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
+
         rotationEnd = Time.time + rotationTime;
         timer = Time.time;
         rotating = true;
@@ -190,19 +270,32 @@ public class GameController : MonoBehaviour
     }
 
     public void ResetFieldStates(){
+        /*
+        Description:
+            Reset the current state of all PlayTiles
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
+
         foreach(var tile in playTiles){
             tile.ResetState();
         }
     }
 
     public void MakeMove(PlayTile targetTile){
-        if(!originTile.isBase && !targetTile.isBoat){
-            //Regular Move
-            playing_field_states[(int)targetTile.position.x,(int)targetTile.position.y] = currentPlayer;
-            playing_field_states[(int)originTile.position.x,(int)originTile.position.y] = 0;
-        }else if(originTile.isBase){
-            HomeFigures[currentPlayer] -= 1;
-        }else if(targetTile.isBoat){
+        /*
+        Description:
+            Movement Logic entry point
+
+        Parameters: 
+            PlayTile targetTile: PlayTile to move to
+
+        Returns: N/A
+        */
+
+        if(targetTile.isBoat){
             BoatFigures[currentPlayer] += 1;
             if(BoatFigures[currentPlayer] >= 5){
                 winner = currentPlayer + 1;
@@ -214,11 +307,25 @@ public class GameController : MonoBehaviour
     }
 
     public bool CheckMoveValid(PlayTile startTile, PlayTile targetTile){
+        /*
+        Description:
+            Checks whether a move from startTile to targetTile is valid
+
+        Parameters: 
+            PlayTile startTile: Origin PlayTile of the move
+            PlayTile targetTile: PlayTile to move to
+
+        Returns: bool moveValid
+        */
+
+        //If the target is another player's boat, abort
         if(targetTile.isBoat){
             if(targetTile.boatColor != currentPlayer){
                 return false;
             }
         }
+
+        //Check regular moves
         if(!targetTile.isBase){
             if(!startTile.isBoat){
                 if(targetTile.currentFigure == null){
@@ -237,14 +344,24 @@ public class GameController : MonoBehaviour
                     }
                 }
             }
-        }else 
-        if(CheckForJump(startTile, targetTile)){
+        }else if(CheckForJump(startTile, targetTile)){
             return true;
         }
+        // If nothing else applies, the move is invalid
         return false;
     }
 
     public bool CheckForJump(PlayTile startTile, PlayTile targetTile){
+        /*
+        Description:
+            Checks whether a jump from startTile to targetTile is valid
+
+        Parameters: 
+            PlayTile startTile: Origin PlayTile of the move
+            PlayTile targetTile: PlayTile to move to
+
+        Returns: bool moveValid
+        */
         for(int i = 0; i < 8; i++)
         {
             if(startTile.Neighbors[i] != null)
@@ -272,10 +389,21 @@ public class GameController : MonoBehaviour
     }
 
     public void SelectTile(PlayTile tile){
+        /*
+        Description:
+            Selects a tile and executes a move if valid
+
+        Parameters: 
+            PlayTile tile: Tile the player/ai wants to select
+
+        Returns: N/A
+        */
         if(originTile == tile){
             originTile = null;
             return;
         } 
+
+        //If no other tile has been selected before this one
         if(originTile == null){
             if(tile.currentFigure != null){
                 if(lastJumpTarget != null){
@@ -288,9 +416,8 @@ public class GameController : MonoBehaviour
                 }else{
                     originTile = tile;
                 }
-                
             }
-            
+        //If another tile has been selected
         }else{
             if(CheckMoveValid(originTile, tile)){
                 if(CheckForJump(originTile, tile)){
@@ -308,34 +435,48 @@ public class GameController : MonoBehaviour
         }
     }
     public void InitializeGame(bool[] playersActive){
+        /*
+        Description:
+            Initializes all game parameters and players
+
+        Parameters: 
+            bool[] playersActive: Length 4, information on which players are active. index = player
+
+        Returns: N/A
+        */
         menu.SetPlayerActiveText(players[currentPlayer].nickname, players[currentPlayer].color);
         for (int i = 0; i < playersActive.Length; i++)
         {
             players[i].InitializePlayer(playersActive[i], playTiles);
-
-            if(!playersActive[i])
-            {
-                for(int y = 0; y < 16; y++)
-                {
-                    for(int x = 0; x < 16; x++)
-                    {
-                        if(playing_field_states[x,y] == i+1)
-                        {
-                            playing_field_states[x,y] = 0;
-                        }
-                    }
-                }
-            }
         }
     }
 
     public void AddToFigures(Figure fig)
     {
+        /*
+        Description:
+            Add a new Figure to the allFigures array
+
+        Parameters: 
+            Figure fig: The figure to add
+
+        Returns: N/A
+        */
         Array.Resize(ref allFigures, allFigures.Length + 1);
         allFigures[allFigures.Length-1] = fig;
     }
 
     public int getBoatPosition(int p){
+        /*
+        Description:
+            Get the position of a players boat
+
+        Parameters: 
+            int p: playerNumber
+
+        Returns: N/A
+        */
+
         return BoatPositions[p];
     }
 }
