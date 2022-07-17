@@ -470,11 +470,15 @@ public class GameController : MonoBehaviour
         /*
         Description:
             Get the position of a players boat
+            0 = north
+            1 = east
+            2 = south
+            3 = west
 
         Parameters: 
             int p: playerNumber
 
-        Returns: N/A
+        Returns: int boatPosition
         */
 
         return BoatPositions[p];
