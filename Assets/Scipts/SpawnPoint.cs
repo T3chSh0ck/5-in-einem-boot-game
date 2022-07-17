@@ -33,8 +33,5 @@ public class SpawnPoint : MonoBehaviour
         instanz.GetComponent<Renderer>().material.color = player.color;
         instanz.GetComponent<Figure>().playerNr = player.playerNumber;
         return instanz.GetComponent<Figure>();
-        //foreach(SpawnPoint p in player1)
-        //GameObject instanz = Instantiate(Figure, gameObject.transform.position, Quaternion.identity); 
-        //instanz.GetComponent<Renderer>ssssssssssssssssssssssssss().material.color = player.color; 
     }
 }
