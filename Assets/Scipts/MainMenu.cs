@@ -12,7 +12,7 @@ public class MainMenu : MonoBehaviour
     public Toggle[] toggles;
     public TMP_Dropdown[] dropdowns;
     public Button submit;
-    public GameObject playground, nature, menu, rulewindow, victoryWindow, rules, ruleee, errortextfield;
+    public GameObject playground, nature, menu, rulewindow, victoryWindow, rules, ruleee, errortextfield, playerinfo;
     void Start()
     {
         {
@@ -73,10 +73,12 @@ public class MainMenu : MonoBehaviour
         if (rule.isOn)
         {
             ruleee.SetActive(true);
+            playerinfo.SetActive(false);
         }
         else
         {
             ruleee.SetActive(false);
+            playerinfo.SetActive(true);
         }
     }
     public void OnSubmit()
