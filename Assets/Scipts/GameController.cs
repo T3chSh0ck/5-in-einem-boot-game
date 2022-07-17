@@ -61,9 +61,12 @@ public class GameController : MonoBehaviour
     bool AIMoveMade = false;
 
     public MainMenu menu;
+
+    private System.Random rand;
+
     void Start()
     {
-
+        rand = new System.Random();
         trans = gameObject.transform;
         playTiles = GetComponentsInChildren<PlayTile>();
         figureOffsetOnBoat = new Vector3[]{
@@ -84,9 +87,10 @@ public class GameController : MonoBehaviour
         }
         if(players[currentPlayer].isAi && !AIMoveMade){
             Debug.Log("AI " + currentPlayer + "'s turn");
+            AIMoveMade = true;
             //players[currentPlayer].AIController.DecideMove();
             WaitBeforeDeciding();
-            AIMoveMade = true;
+            
         }
         if (rotating){
             timer += Time.deltaTime;
@@ -109,6 +113,7 @@ public class GameController : MonoBehaviour
     {
         if (winner == 0)
         {
+            Debug.Log("Player " + currentPlayer + " done");
             NextPlayer();
         }
         else
@@ -135,7 +140,7 @@ public class GameController : MonoBehaviour
     }
     
     public void WaitBeforeDeciding(){
-        StartCoroutine(PauseGame(1.0f));
+        StartCoroutine(PauseGame(0.9f + (1 / (rand.Next(9)+1) )));
     }
     public IEnumerator PauseGame(float pauseTime){
         Time.timeScale = 0f;

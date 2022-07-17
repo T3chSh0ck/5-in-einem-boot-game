@@ -74,7 +74,7 @@ public class AI : MonoBehaviour
                     controller.EndTurn();
                     return;
                 }else if(MoveTowardsBoat(figureToMove, figureToMoveIdx)){
-                    controller.EndTurn();
+                    //controller.EndTurn();
                     return;
                 }else{
                     attemptsMade++;
