@@ -20,8 +20,6 @@ public class GameController : MonoBehaviour
     // BoatPositions: {N, E, S, W}
     private int[] BoatPositions = new int[4] { 0, 1, 2, 3 };
 
-
-    private Vector3[] figureOffsetOnBoat;
     private Dictionary<Vector2,Figure>[] figureByPosition;
     private Transform trans;
     private PlayTile[] playTiles;
@@ -63,15 +61,6 @@ public class GameController : MonoBehaviour
         rand = new System.Random();
         trans = gameObject.transform;
         playTiles = GetComponentsInChildren<PlayTile>();
-
-        //Measured offset for boat seats
-        figureOffsetOnBoat = new Vector3[]{
-            new Vector3(-0.00139999995f,-0.0174499992f,0.0104f),
-            new Vector3(0.00810000021f,-0.0105299996f,0.0104f),
-            new Vector3(-0.0114000002f,-0.00488999998f,0.0104f),
-            new Vector3(0.00989999995f,0.00987999979f,0.0104f),
-            new Vector3(-0.00789999962f,0.0161899999f,0.0104f)
-        };
     }
 
 
