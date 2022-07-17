@@ -13,9 +13,6 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
-        
-
         switch (player)
         {
             case 1:
@@ -33,11 +30,8 @@ public class PlayerController : MonoBehaviour
             default:
                 print("No Player set for Figure: " + this.name);
                 break;
-        }
-        
-        
+        } 
     }
-
     // Update is called once per frame
     void Update()
     {

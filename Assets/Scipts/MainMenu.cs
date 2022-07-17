@@ -5,83 +5,169 @@ using UnityEngine;
 using UnityEngine.UI;
 public class MainMenu : MonoBehaviour
 {
-    public GameObject menu, menu1, menu2, menu3; 
-    public Button button1, button2, button3, button4, choosecolorblue, choosecolorgreen, choosecolorred, choosecoloryellow, submit;
-    public Player player1, player2, player3, player4;
-    public TMP_InputField playername;
-    // Start is called before the first frame update
+    public TMP_InputField playername1, playername2, playername3, playername4;
+    public TMP_Text activePlayerInfo, winnerDisplay;
+    public GameController con;
+    public Toggle rule;
+    public Toggle[] toggles;
+    public TMP_Dropdown[] dropdowns;
+    public Button submit;
+    public GameObject playground, nature, menu, rulewindow, victoryWindow, rules, ruleee, errortextfield;
     void Start()
     {
         {
-            submit.onClick.AddListener(()=> StoreName());
-            menu2.SetActive(false);
-            menu3.SetActive(false);
-            button1.onClick.AddListener(() => Spawner(1));
-            button2.onClick.AddListener(() => Spawner(2));
-            button3.onClick.AddListener(() => Spawner(3));
-            button4.onClick.AddListener(() => Spawner(4));
-            choosecolorblue.onClick.AddListener(() => Spawner(5));
-            choosecolorgreen.onClick.AddListener(() => Spawner(6));
-            choosecolorred.onClick.AddListener(() => Spawner(7));
-            choosecoloryellow.onClick.AddListener(() => Spawner(8));
-
+            playground.SetActive(false);
+            nature.SetActive(false);
+            rulewindow.SetActive(false);
+            victoryWindow.SetActive(false);
+            menu.SetActive(true);
+            errortextfield.SetActive(false);
+        }
+    }
+    public void PlayerKIOut(bool[] a)
+    {
+        switch (dropdowns[0].value)
+        {
+            case 0:
+                StoreName(0, playername1.text);
+                break;
+            case 1:
+                StoreName(0, playername1.text);
+                con.players[0].isAi = true;
+                break;
+        }
+        switch (dropdowns[1].value)
+        {
+            case 0:
+                StoreName(1, playername2.text);
+                break;
+            case 1:
+                StoreName(1, playername2.text);
+                con.players[1].isAi = true;
+                break;
+        }
+        switch (dropdowns[2].value)
+        {
+            case 0:
+                StoreName(2, playername3.text);
+                break;
+            case 1:
+                StoreName(2, playername3.text);
+                con.players[2].isAi = true;
+                break;
+        }
+        switch (dropdowns[3].value)
+        {
+            case 0:
+                StoreName(3, playername4.text);
+                break;
+            case 1:
+                StoreName(3, playername4.text);
+                con.players[3].isAi = true;
+                break;
+        }
+        con.InitializeGame(a);
+    }
+    public void RuleButton()
+    {
+        if (rule.isOn)
+        {
+            ruleee.SetActive(true);
+        }
+        else
+        {
+            ruleee.SetActive(false);
+        }
+    }
+    public void OnSubmit()
+    {
+        int dropdownplayer = 0;
+        int activePlayers = 0;
+        for (int i = 0; i < toggles.Length; i++)
+        {
+            if(toggles[i].isOn){
+                activePlayers++;
+                if(dropdowns[i].value == 0){
+                    dropdownplayer++;
+                }
+            }
             
         }
-    }
+        if (activePlayers > 1)
+        {
+            if(dropdownplayer > 0)
+            {
+                playground.SetActive(true);
+                nature.SetActive(true);
+                menu.SetActive(false);
+                rulewindow.SetActive(true);
+                ruleee.SetActive(false);
 
-    // Update is called once per frame
-    void Update()
+                IsOn();
+            }
+            else
+            {
+                StartCoroutine(DisplayErrors(2));
+            }
+        }
+        else
+        {
+            StartCoroutine(DisplayErrors(1));
+        }
+    }
+    IEnumerator DisplayErrors(int error)
     {
+        errortextfield.SetActive(true);
+        switch (error)
+        {
+            case 1:
+                errortextfield.GetComponent<TMP_Text>().text = "Bitte waehlen Sie mehr als einen Spieler aus!";
+                break;
+            case 2:
+                errortextfield.GetComponent<TMP_Text>().text = "Sie koennen das Spiel nicht nur mit Computergegnern starten!";
+                break;
+        }
+        yield return new WaitForSeconds(2f);
+        errortextfield.SetActive(false);
+    }
+    public void IsOn()
+    {        
+        bool[] playersaktiv = new bool[4];
+        if (toggles[0].isOn)
+        {
+            playersaktiv[0] = true;
+        }
+        if (toggles[1].isOn)
+        {
+            playersaktiv[1] = true;
+        }
+        if (toggles[2].isOn)
+        {
+            playersaktiv[2] = true;
+        }
+        if (toggles[3].isOn)
+        {
+            playersaktiv[3] = true;
+        }
+        PlayerKIOut(playersaktiv);  
+    }
+    public void StoreName(int playerNr, string name)
+    {
+        if(name != null && name != ""){
+            con.players[playerNr].nickname = name;
+        }else{
+            con.players[playerNr].nickname = (playerNr + 1) +"";
+        }
         
     }
-    public void StoreName()
-    {
-        Debug.Log(playername.text);
+    public void SetPlayerActiveText(string name, Color col){
+        activePlayerInfo.text = "Spieler " + name + " ist am Zug";
+        activePlayerInfo.color = col;
     }
-
-    public void Spawner(int a)
-    {
-        menu1.SetActive(false);
-        menu2.SetActive(true);
-        if (a == 5)
-           
-        {
-
-            foreach (SpawnPoint p in player1.spawnpoints)
-            {
-                p.Spawn();
-
-            }
-            menu2.SetActive(false);
-            menu3.SetActive(true);
-
-
-        }
-        if (a == 6)
-        {
-            foreach (SpawnPoint p in player2.spawnpoints)
-            {
-                p.Spawn();
-            }
-            menu2.SetActive(false);
-
-        }
-        if (a == 7)
-        {
-            foreach (SpawnPoint p in player3.spawnpoints)
-            {
-                p.Spawn();
-            }
-            menu2.SetActive(false);
-        }
-        if (a == 8)
-        {
-            foreach (SpawnPoint p in player4.spawnpoints)
-            {
-                p.Spawn();
-            }
-            menu2.SetActive(false);
-        }
-    } 
+    public void AndTheWinnerIs(string name, Color col){
+        winnerDisplay.text = "Spieler " + name + " hat gewonnen!";
+        winnerDisplay.color = col;
+        rulewindow.SetActive(false);
+        victoryWindow.SetActive(true);
+    }
 }
-

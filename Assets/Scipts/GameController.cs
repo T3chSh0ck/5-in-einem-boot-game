@@ -1,6 +1,9 @@
+using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -13,11 +16,10 @@ public class GameController : MonoBehaviour
      * 3: player 3
      * 4: player 4
      */
-
     private int[] HomeFigures = new int[4] { 5, 5, 5, 5 };
-    private int[] BoatFigures = new int[4] { 0, 0, 0, 0 };
+    public int[] BoatFigures = new int[4] { 0, 0, 0, 0 };
     // BoatPositions: {N, E, S, W}
-    private int[] BoatPositions = new int[4] { 1, 2, 3, 4 };
+    private int[] BoatPositions = new int[4] { 0, 1, 2, 3 };
 
     private int?[,] playing_field_states = new int?[16, 16]{ {null,null,null,null,null,null,   0,   0,   0,   0,null,null,null,null,null,null},
                                                              {null,null,null,null,null,null,null,   0,   0,null,null,null,null,null,null,null},
@@ -35,54 +37,305 @@ public class GameController : MonoBehaviour
                                                              {null,null,   1,null,null,null,null,   0,   0,null,null,null,null,   4,null,null},
                                                              {null,null,null,null,null,null,null,   0,   0,null,null,null,null,null,null,null},
                                                              {null,null,null,null,null,null,   0,   0,   0,   0,null,null,null,null,null,null}};
-    // Start is called before the first frame update
+    private Vector3[] figureOffsetOnBoat;
+    private Dictionary<Vector2,Figure>[] figureByPosition;
+    private Transform trans;
+    private PlayTile[] playTiles;
+    public PlayTile[] boats;
+    public PlayTile originTile;
+
+    public Player[] players;
+    public int winner = 0;
+
+    public int currentPlayer = 0;
+    public Figure[] allFigures;
+    public GameObject BoatPivot;
+    private float rotationTime = 3.0f;
+    private float rotationEnd = 0;
+    private float timer;
+    private bool rotating;
+    private Vector3 nextRotation;
+
+    public bool moreJumpsPossibleThisTurn = false;
+    private PlayTile lastJumpTarget;
+    bool AIMoveMade = false;
+
+    public MainMenu menu;
+
+    private System.Random rand;
+
     void Start()
     {
-
+        rand = new System.Random();
+        trans = gameObject.transform;
+        playTiles = GetComponentsInChildren<PlayTile>();
+        figureOffsetOnBoat = new Vector3[]{
+            new Vector3(-0.00139999995f,-0.0174499992f,0.0104f),
+            new Vector3(0.00810000021f,-0.0105299996f,0.0104f),
+            new Vector3(-0.0114000002f,-0.00488999998f,0.0104f),
+            new Vector3(0.00989999995f,0.00987999979f,0.0104f),
+            new Vector3(-0.00789999962f,0.0161899999f,0.0104f)
+        };
     }
 
-    // Update is called once per frame
+
     void Update()
     {
-       // Debug.Log(playing_field_states);
+        if (!players[currentPlayer].isActive)
+        {
+            NextPlayer();
+        }
+        if(players[currentPlayer].isAi && !AIMoveMade){
+            Debug.Log("AI " + currentPlayer + "'s turn");
+            AIMoveMade = true;
+            //players[currentPlayer].AIController.DecideMove();
+            WaitBeforeDeciding();
+            
+        }
+        if (rotating){
+            timer += Time.deltaTime;
+            if(timer <= rotationEnd){
+                BoatPivot.transform.eulerAngles = new Vector3(0, BoatPivot.transform.eulerAngles.y + (90/rotationTime) * Time.deltaTime,0);
+                
+            }else{
+                rotating = false;
+            }
+        }
     }
 
-    void UpdatePlacements()
-    {
-
+    public void EndTurnIfNotAI(){
+        if(!players[currentPlayer].isAi){
+            EndTurn();
+        }
     }
 
-    /*PlayTile getTileAtCoordinates(int x, int y)
+    public void EndTurn()
     {
-
-    }*/
-
-    int[] convertCoordinatesToBoard(int x, int y)
-    {
-        // realx  =  22boardx - 66
-        // realy  =  22boardy - 198
-        // Umstellen nach board-koordinaten
-        // boardx = (realx + 66 )/22
-        // boardy = (realy + 198)/22
-
-        int[] boardCoords = new int[2] {(x - origin[0])/22, (y - origin[1])/22};
-        return boardCoords;
+        if (winner == 0)
+        {
+            Debug.Log("Player " + currentPlayer + " done");
+            NextPlayer();
+        }
+        else
+        {
+            menu.AndTheWinnerIs(players[winner-1].nickname, players[winner-1].color);
+        }
     }
 
-    int[] convertBoardToCoordinates(int x, int y)
-    {
-        int[] realCoords = new int[2] { origin[0] + x * 22, origin[1] + y * 22 };
-        return realCoords;
+    public void RestartGame(){
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+    public void NextPlayer(){
+        if(currentPlayer < 3){
+            currentPlayer++;
+        }else{
+            currentPlayer = 0;
+        }
+        originTile = null;
+        lastJumpTarget = null;
+        moreJumpsPossibleThisTurn = false;
+        AIMoveMade = false;
+        menu.SetPlayerActiveText(players[currentPlayer].nickname, players[currentPlayer].color);
+    }
+    
+    public void WaitBeforeDeciding(){
+        StartCoroutine(PauseGame(0.9f + (1 / (rand.Next(9)+1) )));
+    }
+    public IEnumerator PauseGame(float pauseTime){
+        Time.timeScale = 0f;
+        float pauseEndTime = Time.realtimeSinceStartup + pauseTime;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        Time.timeScale = 1f;
+        
+        players[currentPlayer].AIController.DecideMove();
+    }
+
 
     void RotateBoats()
     {
+        rotationEnd = Time.time + rotationTime;
+        timer = Time.time;
+        rotating = true;
         int swap = BoatPositions[0];
-        BoatPositions[0] = BoatPositions[3];
-        BoatPositions[3] = BoatPositions[2];
-        BoatPositions[2] = BoatPositions[1];
-        BoatPositions[1] = swap;
+        BoatPositions[0] = BoatPositions[1];
+        BoatPositions[1] = BoatPositions[2];
+        BoatPositions[2] = BoatPositions[3];
+        BoatPositions[3] = swap;
+
+        PlayTile[] temp = boats[0].Neighbors;
+        boats[0].Neighbors = boats[1].Neighbors;
+        boats[1].Neighbors = boats[2].Neighbors;
+        boats[2].Neighbors = boats[3].Neighbors;
+        boats[3].Neighbors = temp;
+
+        foreach (PlayTile boat in boats)
+        {
+            foreach (PlayTile n in boat.Neighbors)
+            {
+                for (int i = 0; i < n.Neighbors.Length; i++)
+                {
+                    if(n.Neighbors[i] != null){
+                        if(n.Neighbors[i].isBoat){
+                            n.Neighbors[i] = boat;
+                        }
+                    }
+                }   
+            }
+        }
         
     }
 
+    public void ResetFieldStates(){
+        foreach(var tile in playTiles){
+            tile.ResetState();
+        }
+    }
+
+    public void MakeMove(PlayTile targetTile){
+        if(!originTile.isBase && !targetTile.isBoat){
+            //Regular Move
+            playing_field_states[(int)targetTile.position.x,(int)targetTile.position.y] = currentPlayer;
+            playing_field_states[(int)originTile.position.x,(int)originTile.position.y] = 0;
+        }else if(originTile.isBase){
+            HomeFigures[currentPlayer] -= 1;
+        }else if(targetTile.isBoat){
+            BoatFigures[currentPlayer] += 1;
+            if(BoatFigures[currentPlayer] >= 5){
+                winner = currentPlayer + 1;
+            }
+            RotateBoats();
+        }
+        originTile.MakeMove(targetTile);
+        originTile = null;
+    }
+
+    public bool CheckMoveValid(PlayTile startTile, PlayTile targetTile){
+        if(targetTile.isBoat){
+            if(targetTile.boatColor != currentPlayer){
+                return false;
+            }
+        }
+        if(!targetTile.isBase){
+            if(!startTile.isBoat){
+                if(targetTile.currentFigure == null){
+                    if(startTile.Neighbors.Contains(targetTile)){
+                        if(!moreJumpsPossibleThisTurn){
+                            return true;
+                        }
+                    }else if(moreJumpsPossibleThisTurn){
+                        if(startTile == lastJumpTarget){
+                            if(CheckForJump(startTile, targetTile)){
+                                return true;
+                            }
+                        }
+                    }else if(CheckForJump(startTile, targetTile)){
+                        return true;
+                    }
+                }
+            }
+        }else 
+        if(CheckForJump(startTile, targetTile)){
+            return true;
+        }
+        return false;
+    }
+
+    public bool CheckForJump(PlayTile startTile, PlayTile targetTile){
+        for(int i = 0; i < 8; i++)
+        {
+            if(startTile.Neighbors[i] != null)
+            {
+                if(!startTile.Neighbors[i].isBoat)
+                {
+                    if(startTile.Neighbors[i].Neighbors[i] != null)
+                    {
+                        if(startTile.Neighbors[i].currentFigure != null)
+                        {
+                            if(startTile.Neighbors[i].Neighbors[i] == targetTile)
+                            {
+                                if(targetTile.currentFigure == null){
+                                    return true;
+                                }
+                            }
+                        }
+                    }
+                }
+                
+            }
+                    
+        }
+        return false;
+    }
+
+    public void SelectTile(PlayTile tile){
+        if(originTile == tile){
+            originTile = null;
+            return;
+        } 
+        if(originTile == null){
+            if(tile.currentFigure != null){
+                if(lastJumpTarget != null){
+                    if(tile == lastJumpTarget){
+                        originTile = tile;
+                    }
+                    else{
+                        originTile = null;
+                    }
+                }else{
+                    originTile = tile;
+                }
+                
+            }
+            
+        }else{
+            if(CheckMoveValid(originTile, tile)){
+                if(CheckForJump(originTile, tile)){
+                    lastJumpTarget = tile;
+                    MakeMove(tile);
+                }else{
+                    MakeMove(tile);
+                    originTile = null;
+                    EndTurn();
+                }
+                
+            }else{
+                originTile = tile;
+            }
+        }
+    }
+    public void InitializeGame(bool[] playersActive){
+        menu.SetPlayerActiveText(players[currentPlayer].nickname, players[currentPlayer].color);
+        for (int i = 0; i < playersActive.Length; i++)
+        {
+            players[i].InitializePlayer(playersActive[i], playTiles);
+
+            if(!playersActive[i])
+            {
+                for(int y = 0; y < 16; y++)
+                {
+                    for(int x = 0; x < 16; x++)
+                    {
+                        if(playing_field_states[x,y] == i+1)
+                        {
+                            playing_field_states[x,y] = 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    public void AddToFigures(Figure fig)
+    {
+        Array.Resize(ref allFigures, allFigures.Length + 1);
+        allFigures[allFigures.Length-1] = fig;
+    }
+
+    public int getBoatPosition(int p){
+        return BoatPositions[p];
+    }
 }

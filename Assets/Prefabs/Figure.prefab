@@ -111,3 +111,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNr: 0
+  movingRegular: 0
+  movingJump: 0
+  y_offset: 8
