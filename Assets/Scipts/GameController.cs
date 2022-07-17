@@ -83,8 +83,10 @@ public class GameController : MonoBehaviour
             NextPlayer();
         }
         if(players[currentPlayer].isAi && !AIMoveMade){
+            Debug.Log("AI " + currentPlayer + "'s turn");
+            //players[currentPlayer].AIController.DecideMove();
+            WaitBeforeDeciding();
             AIMoveMade = true;
-            players[currentPlayer].AIController.DecideMove();
         }
         if (rotating){
             timer += Time.deltaTime;
@@ -96,6 +98,13 @@ public class GameController : MonoBehaviour
             }
         }
     }
+
+    public void EndTurnIfNotAI(){
+        if(!players[currentPlayer].isAi){
+            EndTurn();
+        }
+    }
+
     public void EndTurn()
     {
         if (winner == 0)
@@ -121,11 +130,25 @@ public class GameController : MonoBehaviour
         originTile = null;
         lastJumpTarget = null;
         moreJumpsPossibleThisTurn = false;
-        if(players[currentPlayer].isAi){
-            AIMoveMade = false;
-        }
+        AIMoveMade = false;
         menu.SetPlayerActiveText(players[currentPlayer].nickname, players[currentPlayer].color);
     }
+    
+    public void WaitBeforeDeciding(){
+        StartCoroutine(PauseGame(1.0f));
+    }
+    public IEnumerator PauseGame(float pauseTime){
+        Time.timeScale = 0f;
+        float pauseEndTime = Time.realtimeSinceStartup + pauseTime;
+        while (Time.realtimeSinceStartup < pauseEndTime)
+        {
+            yield return 0;
+        }
+        Time.timeScale = 1f;
+        
+        players[currentPlayer].AIController.DecideMove();
+    }
+
 
     void RotateBoats()
     {

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Figure : MonoBehaviour
 {
     private float movementFramesRegular = 60;
-    private float movementFramesJump = 240;
+    private float movementFramesJump = 90;
     private float performedFrames = 0;
     public int playerNr;
     public bool movingRegular = true;
