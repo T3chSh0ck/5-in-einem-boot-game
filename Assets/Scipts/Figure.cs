@@ -33,7 +33,7 @@ public class Figure : MonoBehaviour
     public void InitializePosition(){
         /*
         Description:
-            Initializes the position by setting the currentFigure of the PlayTile below the figure to itself
+            Initializes the currentFigure value of the Tile below the Figure
 
         Parameters: N/A
 
@@ -95,11 +95,27 @@ public class Figure : MonoBehaviour
 
     public void MoveRegular(PlayTile targetTile)
     {
+        /*
+        Description:
+            Starts the animation for a regular move
+
+        Parameters: PlayTile targetTile: target tile of the move
+
+        Returns: N/A
+        */
         movingRegular = true;
         newPosition = new Vector3(targetTile.transform.position.x, targetTile.transform.position.y + y_offset, targetTile.transform.position.z);
     }
     public void MoveJump(PlayTile targetTile)
     {
+        /*
+        Description:
+            Starts the animation for a jump
+
+        Parameters: PlayTile targetTile: target tile of the move
+
+        Returns: N/A
+        */
         movingJump = true;
         newPosition = new Vector3(targetTile.transform.position.x, targetTile.transform.position.y + y_offset, targetTile.transform.position.z);
     }

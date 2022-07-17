@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -25,20 +26,30 @@ public class PlayTile : MonoBehaviour
     public Figure[] figuresOnBase;
 
     
-    // Start is called before the first frame update
+    
     private void OnDrawGizmos() 
     {
+        /*
+        Description:
+            Preset Method in Unity. Only called in Editor, left out when building
+            Draws Lines between PlayTiles and their Neighbors
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
         Vector3 offset = new Vector3(0,5,0);
         Gizmos.color = Color.red;
         foreach(PlayTile neighbor in Neighbors)
         {
             if(neighbor != null)
-            {
+            {              
                 Gizmos.DrawLine(transform.position + offset, neighbor.transform.position + offset);
             }
         }
     }
-    
+
+    // Start is called before the first frame update
     void Start()
     {
 
@@ -48,6 +59,16 @@ public class PlayTile : MonoBehaviour
 
     void OnMouseEnter()
     {
+        /*
+        Description:
+            Preset Method in Unity. Called when Mouse enters Objects hitbox.
+            Highlights this tile.
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
+        
         if(!isBase && !isBoat){
             if(!selected){
             rend.material = HoverMaterial;
@@ -58,6 +79,15 @@ public class PlayTile : MonoBehaviour
 
     void OnMouseExit()
     {
+        /*
+        Description:
+            Preset Method in Unity. Called when Mouse exits Objects hitbox.
+            Removes the Highlight on this tile.
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
         if(!isBase && !isBoat){
             if(!selected){
                 rend.material = NormalMaterial;
@@ -66,6 +96,15 @@ public class PlayTile : MonoBehaviour
     }
 
     void OnMouseDown(){
+        /*
+        Description:
+            Preset Method in Unity. Called when Mouse clicks on the Object.
+            Selects tile and changes Highlight color.
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
         if(controller.players[controller.currentPlayer].isAi){
             return;
         }
@@ -89,6 +128,14 @@ public class PlayTile : MonoBehaviour
     }
 
     public void ResetState(){
+        /*
+        Description:
+            Resets all highlights of this tile
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
         selected = false;
         if(!isBase && !isBoat)
         {
@@ -98,7 +145,8 @@ public class PlayTile : MonoBehaviour
     }
 
     public void MakeMove(PlayTile targetTile){
-        if(Mathf.Abs(targetTile.position.x-position.x) <=1 && Mathf.Abs(targetTile.position.y-position.y) <= 1){
+        //if the target is a direct neighbor of this tile
+        if(Neighbors.Contains(targetTile)){
             currentFigure.MoveRegular(targetTile);
             controller.moreJumpsPossibleThisTurn = false;
         }else{
@@ -139,6 +187,14 @@ public class PlayTile : MonoBehaviour
     }
 
     public void AddFigureToBase(Figure fig){
+        /*
+        Description:
+            Adds a new Figure to the FiguresOnBase Array
+
+        Parameters: Figure fig: Figure to add to the Array
+
+        Returns: N/A
+        */
         Array.Resize(ref figuresOnBase, figuresOnBase.Length + 1);
         figuresOnBase[figuresOnBase.Length-1] = fig;
         currentFigure = fig;
@@ -146,6 +202,16 @@ public class PlayTile : MonoBehaviour
 
     private Vector2 convertCoordinatesToBoard(int x, int y)
     {
+        /*
+        Description:
+            Converts world coordinates to board coordinates
+
+        Parameters: 
+            int x: X-Coordinate (relative to board)
+            int y: Y-Coordinate (relative to board)
+
+        Returns: Vector2 boardCoords: Board coordinates
+        */
         // realx  =  22boardx - 66
         // realy  =  22boardy - 198
         // Umstellen nach board-koordinaten

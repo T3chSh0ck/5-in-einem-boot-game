@@ -5,6 +5,9 @@ using UnityEngine;
 
 struct WinningMove
 {
+    /*
+    Struct containing all information about a possible winning move
+    */
     public bool canWin; 
     public int fieldIndex;
     public PlayTile Boat;
@@ -23,13 +26,17 @@ public class AI : MonoBehaviour
         AIFigurePositions = new PlayTile[8];
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void InitializeAI(int num, PlayTile[] gameBoard){
+        /*
+        Description:
+            Initializes all needed attribute values 
+
+        Parameters: 
+            int num: player number
+            PlayTile[] gameBoard: the entire playing field
+
+        Returns: N/A
+        */
         playerNumber = num;
         int AIFigureIndex = 0;
             for(int idx = 0; idx < gameBoard.Length; idx++){
@@ -50,14 +57,21 @@ public class AI : MonoBehaviour
 
     public void DecideMove(){
         /*
-        Priority:
-        1. Get into Boat
-        2. Jump towards Boat
-        3. Move towards Boat
-        4. move either left or right
-        5. move back
-        6. pick another figure
-        7. no figure left: end turn
+        
+
+        Description:
+            Priority based decisions:
+            1. Get into Boat
+            2. Jump towards Boat
+            3. Move towards Boat
+            4. move either left or right
+            5. move back
+            6. pick another figure
+            7. no figure left: end turn
+
+        Parameters: N/A
+
+        Returns: N/A
         */
         
         WinningMove boatJump = CheckForBoat();
@@ -91,6 +105,16 @@ public class AI : MonoBehaviour
     }
 
     bool MoveTowardsBoat(PlayTile tile, int FigureIdx){
+        /*
+        Description:
+            Try to move towards the boat
+
+        Parameters: 
+            PlayTile tile: tile to move from 
+            int FigureIdx: index of figure in AIFIgurePositions array
+
+        Returns: successful
+        */
         if(tile.Neighbors[boatDirection] != null){
             if(controller.CheckMoveValid(tile, tile.Neighbors[boatDirection])){
                 MoveFromTo(tile, tile.Neighbors[boatDirection], FigureIdx);
@@ -138,12 +162,30 @@ public class AI : MonoBehaviour
     } 
 
     void RemoveFigureFromList(int idx){
+        /*
+        Description:
+            Remove a figure from the AI's list
+
+        Parameters: 
+            int idx: index of figure in AIFIgurePositions array
+
+        Returns: N/A
+        */
         AIFigurePositions[idx] = AIFigurePositions[AIFigurePositions.Length-1];
         Array.Resize(ref AIFigurePositions, AIFigurePositions.Length-1);
     }
     
     bool JumpTowardsBoat(PlayTile tile, int FigureIdx){
-        
+        /*
+        Description:
+            Try to jump towards the boat
+
+        Parameters: 
+            PlayTile tile: tile to move from 
+            int FigureIdx: index of figure in AIFIgurePositions array
+
+        Returns: successful
+        */
         if(tile.Neighbors[boatDirection] != null){
             if(tile.Neighbors[boatDirection].Neighbors[boatDirection] != null){
                 if(controller.CheckForJump(tile, tile.Neighbors[boatDirection].Neighbors[boatDirection])){
@@ -221,6 +263,16 @@ public class AI : MonoBehaviour
     }
 
     void MoveFromTo(PlayTile fromTile, PlayTile toTile){
+        /*
+        Description:
+            Execute a move from startTile to toTile
+
+        Parameters: 
+            PlayTile fromTile: starting tile of move
+            PlayTile toTile: target tile of move
+
+        Returns: N/A
+        */
         Debug.Log("AI Player "+ playerNumber + " moving from " + fromTile + " to  Boat");
         controller.SelectTile(fromTile);
         controller.SelectTile(toTile);

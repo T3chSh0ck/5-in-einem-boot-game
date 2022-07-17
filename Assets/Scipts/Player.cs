@@ -25,7 +25,14 @@ public class Player : MonoBehaviour
     }
 
     public void SpawnFigures(PlayTile[] gameBoard){
-        {
+        /*
+        Description:
+            Spawns the Figures of this player and creates an AI if necessary
+
+        Parameters: PlayTile[] gameBoard: All tiles on the playing field
+
+        Returns: N/A
+        */
             if (isActive == true)
             {
                 foreach (SpawnPoint sp in spawnpoints)
@@ -38,13 +45,20 @@ public class Player : MonoBehaviour
                     AIController.InitializeAI(playerNumber, gameBoard);
                 }
             }
-        }
-        
-    }
 
+    }
     public void InitializePlayer(bool playersaktiv, PlayTile[] gameBoard){
+        /*
+        Description:
+            Sets up a player object
+
+        Parameters: 
+            bool playersaktiv: Is the player participating?
+            PlayTile[] gameBoard: All tiles on the playing field
+
+        Returns: N/A
+        */
         isActive = playersaktiv;
         SpawnFigures(gameBoard);
-        
     }
 }
