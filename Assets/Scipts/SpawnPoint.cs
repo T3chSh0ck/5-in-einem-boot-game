@@ -11,7 +11,6 @@ public class SpawnPoint : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //Figure.playerNr = player.playerNumber;
 
     }
 
@@ -21,6 +20,14 @@ public class SpawnPoint : MonoBehaviour
         
     }        
     public Figure Spawn(){
+        /*
+        Description:
+            Creates a new Instance of a Figure on top of itself
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
         GameObject instanz = Instantiate(Figure, gameObject.transform.position + offset, Quaternion.identity);
         instanz.GetComponent<Renderer>().material.color = player.color;
         instanz.GetComponent<Figure>().playerNr = player.playerNumber;

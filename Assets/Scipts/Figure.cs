@@ -16,13 +16,7 @@ public class Figure : MonoBehaviour
     public bool movedToBoat;
     private Vector3[] offsetOnBoat;
     public int boatSeat;
-    /*
-    public Figure(Vector3 position, Color col, int playerNr)
-    {
-        this.playerNr = playerNr;
-        this.transform.position = position;
-        this.GetComponent<Renderer>().material.color = col;
-    }*/
+
     // Start is called before the first frame update
     void Start()
     {
@@ -37,6 +31,14 @@ public class Figure : MonoBehaviour
     }
 
     public void InitializePosition(){
+        /*
+        Description:
+            Initializes the position by setting the currentFigure of the PlayTile below the figure to itself
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
         RaycastHit hit;
         if(Physics.Raycast(transform.position, -Vector3.up, out hit)) {
             PlayTile startTile = hit.transform.gameObject.GetComponent<PlayTile>();
