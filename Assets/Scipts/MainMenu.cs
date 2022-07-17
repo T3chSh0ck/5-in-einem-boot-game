@@ -26,6 +26,15 @@ public class MainMenu : MonoBehaviour
     }
     public void PlayerKIOut(bool[] a)
     {
+        /*
+        Description:
+            checks if player or AI was selected and checks corresponding name input
+
+        Parameters: 
+            boo[] a: Array of Players depending on toggles Input
+
+        Returns: N/A
+        */
         switch (dropdowns[0].value)
         {
             case 0:
@@ -68,8 +77,17 @@ public class MainMenu : MonoBehaviour
         }
         con.InitializeGame(a);
     }
+
     public void RuleButton()
     {
+        /*
+        Description:
+            Displays the GameRules, depending on Toggle.isOn
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
         if (rule.isOn)
         {
             ruleee.SetActive(true);
@@ -83,6 +101,14 @@ public class MainMenu : MonoBehaviour
     }
     public void OnSubmit()
     {
+        /*
+        Description:
+        Starts the Game on ButtonClick, checks Input
+
+        Parameters: N/A
+
+        Returns: int error
+        */
         int dropdownplayer = 0;
         int activePlayers = 0;
         for (int i = 0; i < toggles.Length; i++)
@@ -92,12 +118,13 @@ public class MainMenu : MonoBehaviour
                 if(dropdowns[i].value == 0){
                     dropdownplayer++;
                 }
-            }
-            
+            }         
         }
+        //Checks if the amount of Players is viable
         if (activePlayers > 1)
         {
-            if(dropdownplayer > 0)
+            //Checks whether one or more players are human
+            if (dropdownplayer > 0)
             {
                 playground.SetActive(true);
                 nature.SetActive(true);
@@ -119,6 +146,15 @@ public class MainMenu : MonoBehaviour
     }
     IEnumerator DisplayErrors(int error)
     {
+        /*
+        Description:
+            Shows ErrorText depending on Input
+
+        Parameters: 
+            int erros: Number of InputError
+
+        Returns: N/A
+        */
         errortextfield.SetActive(true);
         switch (error)
         {
@@ -133,7 +169,15 @@ public class MainMenu : MonoBehaviour
         errortextfield.SetActive(false);
     }
     public void IsOn()
-    {        
+    {
+        /*
+        Description:
+            Shows which toogle is active, creates bool[] and fills it with appropriate inputs 
+
+        Parameters: N/A
+
+        Returns: N/A
+        */
         bool[] playersaktiv = new bool[4];
         if (toggles[0].isOn)
         {
@@ -155,18 +199,48 @@ public class MainMenu : MonoBehaviour
     }
     public void StoreName(int playerNr, string name)
     {
-        if(name != null && name != ""){
+        /*
+        Description:
+            Saves the name input of the input fields according to the player number.
+
+        Parameters: 
+            int playerNr: Player number
+            string name: Players names
+
+        Returns: N/A
+        */
+        if (name != null && name != ""){
             con.players[playerNr].nickname = name;
         }else{
             con.players[playerNr].nickname = (playerNr + 1) +"";
         }
         
     }
-    public void SetPlayerActiveText(string name, Color col){
+    public void SetPlayerActiveText(string name, Color col)
+    {
+        /*
+        Description:
+            Shows which player's turn it is
+
+        Parameters: 
+            string name: name of each player
+            Color col: color of each player
+        Returns: N/A
+        */
         activePlayerInfo.text = "Spieler " + name + " ist am Zug";
         activePlayerInfo.color = col;
     }
-    public void AndTheWinnerIs(string name, Color col){
+    public void AndTheWinnerIs(string name, Color col)
+    {
+        /*
+        Description:
+            Displays the Winners name
+
+        Parameters: 
+            string name: name of each player
+            Color col: color of each player
+        Returns: N/A
+        */
         winnerDisplay.text = "Spieler " + name + " hat gewonnen!";
         winnerDisplay.color = col;
         rulewindow.SetActive(false);
